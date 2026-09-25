@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>הנחתי · תזכורת יומית להנחת תפילין לאנדרואיד (חינם)</title>
+<meta name="description" content="הנחתי היא אפליקציה חינמית לאנדרואיד שמזכירה להניח תפילין כל בוקר, עם זמני היום לפי המקום שלך, סדר ההנחה בשלושה נוסחים, פרשת השבוע ותהילים. עובדת בלי אינטרנט, בלי פרסומות ובלי רישום.">
+<meta name="keywords" content="תפילין, הנחת תפילין, תזכורת תפילין, אפליקציה יהודית, זמני היום, סדר הנחת תפילין, פרשת השבוע, תהילים, לוח שנה עברי">
+<link rel="canonical" href="https://hinachti.gitlab.io/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0e0c09">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="הנחתי">
+<meta property="og:locale" content="he_IL">
+<meta property="og:title" content="הנחתי · תזכורת יומית להנחת תפילין">
+<meta property="og:description" content="תזכורת בוקר, זמני היום לפי המקום שלך, סדר ההנחה, פרשת השבוע ותהילים. חינם, בלי פרסומות, עובדת בלי אינטרנט.">
+<meta property="og:url" content="https://hinachti.gitlab.io/">
+<meta property="og:image" content="https://hinachti.gitlab.io/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/img/icon-180.png">
+<link rel="preload" href="/fonts/heebo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/site.css?v=202609251312">
+<script>document.documentElement.className += ' js';</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  "name": "הנחתי",
+  "description": "תזכורת יומית להנחת תפילין, עם זמני היום, סדר ההנחה, פרשת השבוע ותהילים. עובדת בלי אינטרנט.",
+  "url": "https://hinachti.gitlab.io/",
+  "downloadUrl": "https://hinachti.gitlab.io/hinachti-1.7.9.apk",
+  "softwareVersion": "1.7.9",
+  "datePublished": "2026-09-14",
+  "operatingSystem": "Android 8.0+",
+  "applicationCategory": "LifestyleApplication",
+  "fileSize": "1.8 MB",
+  "inLanguage": "he",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "ILS" },
+  "author": { "@type": "Person", "name": "Y.a.M" },
+  "screenshot": ["https://hinachti.gitlab.io/img/morning@2x.webp", "https://hinachti.gitlab.io/img/order@2x.webp", "https://hinachti.gitlab.io/img/calendar@2x.webp"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "האם האפליקציה בחינם?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "כן, לגמרי. אין פרסומות, אין מנוי, ואין רכישות בתוך האפליקציה. גם לא יהיו."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "למה היא לא בחנות של גוגל?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "היא בדרך לשם. גוגל דורשת מחשבון מפתח חדש שתים עשרה אנשים יבדקו את האפליקציה ארבעה עשר יום ברצף לפני שמותר לפרסם אותה לכולם. עד שזה יושלם, מתקינים אותה מכאן, וזו בדיוק אותה אפליקציה."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "בטוח להתקין קובץ APK?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "הקובץ כאן חתום בחתימה שלנו, ואנדרואיד מוודא בעצמו שכל עדכון עתידי נושא בדיוק את אותה חתימה, אחרת הוא מסרב להתקין. גם האפליקציה בודקת את החתימה לפני שהיא מעבירה קובץ להתקנה. האזהרה שאנדרואיד מציג בפעם הראשונה היא האזהרה הרגילה על כל קובץ שלא הגיע מהחנות, ולא סימן לבעיה."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "איך מקבלים עדכונים?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "מתוך האפליקציה. היא בודקת פעם ביום אם יצאה גרסה חדשה, ואם כן מציעה להוריד ולהתקין במקום. אפשר גם לבדוק ידנית בהגדרות ← עדכונים, ואפשר לכבות את הבדיקה לגמרי."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "האפליקציה עוקבת אחריי?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "לא. אין חשבון, אין הרשמה, אין אנליטיקה ואין מזהה משתמש. ההיסטוריה נשמרת במכשיר שלך. הגרסה שתגיע לחנות נבנית בלי הרשאת אינטרנט בכלל, והגרסה שמורידים כאן ניגשת לרשת רק לבדיקת עדכונים."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "איזה אנדרואיד צריך?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "אנדרואיד 8 ומעלה, כלומר כמעט כל טלפון מהשנים האחרונות. לאייפון אין גרסה."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "היא נועלת לי את הטלפון?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "רק אם תבחר בזה. כברירת מחדל היא מזכירה בהתראה ובווידג׳ט ולא חוסמת כלום. מי שרוצה יכול להפעיל בהגדרות מצב שבו האפליקציה היא מסך הבית ונפתחת אחרי הדיווח, וגם אז אפשר לבטל בכל רגע."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "מה קורה להיסטוריה שלי אם אחליף טלפון?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "יש שלוש רשתות ביטחון: הגיבוי של אנדרואיד לחשבון Google, תיקיית גיבוי במכשיר שנכתבת אחרי כל שינוי, וייצוא לקובץ שאתה שומר איפה שתרצה ומייבא במכשיר החדש."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "יש בה מנהגים שונים?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "כן. שלושה נוסחים לסדר ההנחה, בחירה אם מניחים בחול המועד, דקות הדלקת הנרות לפי מנהג המקום, ולוח חגים שונה בארץ ובחו״ל."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "מצאתי טעות, או שיש לי רעיון",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "יופי, זה בדיוק מה שעוזר עכשיו. אפשר לכתוב לכתובת שבמדיניות הפרטיות, ואם זו טעות בטקסט או בזמנים, כדאי לצרף צילום מסך."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">דלג לתוכן</a>
+
+<header class="hero">
+  <svg class="arc" viewBox="0 0 760 240" aria-hidden="true" focusable="false">
+    <path d="M40 220 Q380 -10 720 220" fill="none" stroke="#b7822f" stroke-width="2"
+          stroke-linecap="round" stroke-dasharray="2 12" opacity="0.7"/>
+  </svg>
+
+  <div class="wrap">
+    <img class="applogo" src="/img/icon-192.png" width="108" height="108"
+         alt="האייקון של הנחתי: בית של תפילין עם האות שין">
+    <h1>הנחתי</h1>
+    <p class="tagline">תזכורת אחת בבוקר, ודיווח בלחיצה. שלא יעבור עוד יום בלי שהנחת תפילין.</p>
+
+    <div class="pills">
+      <span class="pill"><span class="dot"></span>גרסה <b><bdi>1.7.9</bdi></b> · <bdi>14 בספטמבר 2026</bdi></span>
+      <span class="pill">עובדת בלי אינטרנט</span>
+      <span class="pill">בלי פרסומות ובלי רישום</span>
+    </div>
+
+    <div class="cta">
+      <a class="btn" href="/hinachti-1.7.9.apk" id="download">הורדה לאנדרואיד <small><bdi dir="ltr">1.8 MB</bdi></small></a>
+      <p class="req">
+        לאנדרואיד 8 ומעלה. האפליקציה עדיין לא בחנות של גוגל, ולכן מתקינים אותה מהקובץ הזה.
+        אנדרואיד יציג פעם אחת אזהרה על התקנה ממקור שאינו החנות, וזו האזהרה הרגילה על כל קובץ התקנה.
+        אחרי ההתקנה הראשונה, העדכונים מגיעים מתוך האפליקציה עצמה.
+      </p>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="wrap">
+    <p class="eyebrow reveal">מה חדש בגרסה 1.7.9</p>
+    <p class="lead reveal">גיבוי לתיקייה שהפסיק לעבוד אחרי התקנה מחדש מוצג עכשיו בבירור, עם כפתור לאשר את התיקייה שוב. המסך מותאם לאנדרואיד 15 ו-16, כולל טלפונים עם חור למצלמה. ובלוח השנה, יום שסימנת שלא הנחת מופיע כ״לא הונח״.</p>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2 class="reveal">איך זה נראה</h2>
+      <p class="lead reveal">שמונה מסכים מתוך האפליקציה. אפשר לגרור הצידה.</p>
+    </div>
+    <div class="wrap">
+      <div class="shots">
+        <figure class="shot">
+        <img src="/img/morning.webp" srcset="/img/morning.webp 540w, /img/morning@2x.webp 1080w"
+             sizes="232px" width="232" height="412" loading="lazy" decoding="async"
+             alt="מסך הבוקר: השעה, השבוע האחרון, הזמן שנותר עד סוף זמן תפילה וכפתור «הנחתי»">
+        <figcaption>הבוקר</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/img/done.webp" srcset="/img/done.webp 540w, /img/done@2x.webp 1080w"
+             sizes="232px" width="232" height="412" loading="lazy" decoding="async"
+             alt="אותו מסך אחרי הדיווח: «הונח היום · 3 ימים ברצף», והשמש על מסלול היום">
+        <figcaption>אחרי הדיווח</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/img/order.webp" srcset="/img/order.webp 540w, /img/order@2x.webp 1080w"
+             sizes="232px" width="232" height="412" loading="lazy" decoding="async"
+             alt="סדר הנחת תפילין: בחירת נוסח אשכנז, ספרד או חב״ד, והברכות בניקוד מלא">
+        <figcaption>סדר ההנחה</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/img/parsha.webp" srcset="/img/parsha.webp 540w, /img/parsha@2x.webp 1080w"
+             sizes="232px" width="232" height="412" loading="lazy" decoding="async"
+             alt="פרשת השבוע «ויצא», עם הסבר קצר בעברית של ימינו לכל עלייה">
+        <figcaption>פרשת השבוע</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/img/calendar.webp" srcset="/img/calendar.webp 540w, /img/calendar@2x.webp 1080w"
+             sizes="232px" width="232" height="412" loading="lazy" decoding="async"
+             alt="לוח שנה לנובמבר 2026 עם התאריך העברי בכל יום, והימים שהונח מסומנים בירוק">
+        <figcaption>לוח השנה</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/img/history.webp" srcset="/img/history.webp 540w, /img/history@2x.webp 1080w"
+             sizes="232px" width="232" height="412" loading="lazy" decoding="async"
+             alt="ההיסטוריה: חמישה ימים שהונח, יום שפוספס, שלושה ימים ברצף, ורשימת 30 הימים האחרונים">
+        <figcaption>ההיסטוריה שלי</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/img/psalms.webp" srcset="/img/psalms.webp 540w, /img/psalms@2x.webp 1080w"
+             sizes="232px" width="232" height="412" loading="lazy" decoding="async"
+             alt="תהילים: כל 150 הפרקים ברשימה, עם חיפוש לפי מספר פרק">
+        <figcaption>תהילים</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/img/psalm.webp" srcset="/img/psalm.webp 540w, /img/psalm@2x.webp 1080w"
+             sizes="232px" width="232" height="412" loading="lazy" decoding="async"
+             alt="תהילים פרק יג בניקוד מלא, פסוק בכל שורה">
+        <figcaption>פרק מנוקד</figcaption>
+      </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2 class="reveal">מה היא עושה</h2>
+    <p class="lead reveal">הכל מחושב במכשיר עצמו. אין שרת, ואין למי לשלוח.</p>
+    <div class="grid">
+
+      <div class="card reveal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-2 9-2 9h16s-2-2-2-9"/><path d="M10.5 21a2 2 0 0 0 3 0"/></svg>
+        <h3>תזכורת, ודיווח בלחיצה</h3>
+        <p>בשעה שתבחר מגיעה התראה. פותחים, מניחים, ולוחצים «הנחתי». אין בדיקה ואין מי שבודק, רק תזכורת שביקשת לקבל.</p>
+      </div>
+
+      <div class="card reveal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+        <h3>זמני היום, לפי המקום שלך</h3>
+        <p>תחילת הזמן, השקיעה והדלקת הנרות, מחושבים על המכשיר לפי העיר שבחרת או לפי מיקום שהיא מזהה לבד. פס בראש המסך מראה כמה זמן נשאר.</p>
+      </div>
+
+      <div class="card reveal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+        <h3>יודעת מתי לא מניחים</h3>
+        <p>שבתות, ימים טובים ותשעה באב. בחול המועד היא שואלת אותך פעם אחת, כי המנהג שונה מקהילה לקהילה, ומכבדת את התשובה.</p>
+      </div>
+
+      <div class="card reveal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5V21h15"/></svg>
+        <h3>סדר ההנחה, בשלושה נוסחים</h3>
+        <p>לשם ייחוד, הברכות, וארשתיך ושמע ישראל, בניקוד מלא ובאותיות גדולות. אשכנז, ספרד ועדות המזרח, וחב״ד.</p>
+      </div>
+
+      <div class="card reveal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7c-2-2-5-2.5-8-2v13c3-.5 6 0 8 2 2-2 5-2.5 8-2V5c-3-.5-6 0-8 2z"/><path d="M12 7v13"/></svg>
+        <h3>פרשת השבוע, עם הסבר</h3>
+        <p>הטקסט המלא, ולצד כל עלייה הסבר קצר בעברית של ימינו: מה בעצם קורה שם. שבעה הסברים לכל פרשה, 378 בסך הכל.</p>
+      </div>
+
+      <div class="card reveal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>
+        <h3>תהילים</h3>
+        <p>כל 150 הפרקים, מנוקדים. לפי סדר היום, לפי עניין, או פשוט לפי מספר הפרק.</p>
+      </div>
+
+      <div class="card reveal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 4-6 5 4"/><path d="M3 21h18"/></svg>
+        <h3>לוח שנה והיסטוריה</h3>
+        <p>חודש לועזי ועברי יחד, עם החגים, עם הימים שהנחת ושלא. בלי ספירה מאשימה, רק מה שהיה. אפשר גם לתקן יום אחורה.</p>
+      </div>
+
+      <div class="card reveal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M10 6h4"/><path d="M8 12h8M8 16h5"/></svg>
+        <h3>וידג׳ט, ונעילה אם תרצה</h3>
+        <p>וידג׳ט למסך הבית עם הזמן שנותר. ואם תבחר בכך, האפליקציה יכולה להיות מסך הבית שלך ולהיפתח רק אחרי שדיווחת. כבוי כברירת מחדל, והפיך בכל רגע.</p>
+      </div>
+
+      <div class="card reveal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
+        <h3>ההיסטוריה שלך נשמרת</h3>
+        <p>גיבוי לחשבון Google של הטלפון, תיקיית גיבוי שנכתבת אחרי כל שינוי, וייצוא לקובץ שאתה שומר בעצמך. גם התקנה מחדש לא מוחקת את הרצף.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="none reveal">
+      <h2>ומה אין כאן</h2>
+      <ul>
+        <li>פרסומות</li>
+        <li>רישום או חשבון</li>
+        <li>מנוי או תשלום</li>
+        <li>איסוף מידע</li>
+        <li>אנליטיקה</li>
+        <li>שיתוף עם צד שלישי</li>
+      </ul>
+      <p class="after">
+        ההיסטוריה וההגדרות נשמרות על המכשיר שלך בלבד. הגרסה שתגיע לחנות נבנית בלי הרשאת גישה לאינטרנט,
+        כך שגם אם תרצה, אין לה דרך לשלוח משהו החוצה. הגרסה שמורידים כאן ניגשת לרשת רק כדי לבדוק אם יצאה
+        גרסה חדשה ולהוריד אותה, ואפשר לכבות גם את זה.
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2 class="reveal">התקנה בשלושה צעדים</h2>
+    <p class="lead reveal">לוקח פחות מדקה.</p>
+    <div class="steps">
+      <div class="step reveal"><p><b>מורידים את הקובץ.</b> לוחצים על כפתור ההורדה. הדפדפן ישאל אם להמשיך, כי זה קובץ התקנה.</p></div>
+      <div class="step reveal"><p><b>פותחים אותו.</b> אנדרואיד יבקש פעם אחת אישור להתקין מהדפדפן. מאשרים, וחוזרים.</p></div>
+      <div class="step reveal"><p><b>זהו.</b> בפעם הראשונה בוחרים עיר ושעת תזכורת. מכאן העדכונים מגיעים מתוך האפליקציה: הגדרות ← עדכונים.</p></div>
+    </div>
+  </section>
+
+    <section class="wrap">
+    <div class="testers reveal">
+      <p class="eyebrow">אפשר לעזור</p>
+      <h2>רוצה שהיא תגיע לחנות?</h2>
+      <p class="lead" style="margin-bottom: 0">
+        גוגל דורשת מחשבון מפתח חדש שתים עשרה אנשים יבדקו את האפליקציה ארבעה עשר יום ברצף
+        לפני שמותר לפרסם אותה לכולם. זה לוקח שתי דקות, וזה הדבר היחיד שמפריד בין האפליקציה
+        לבין החנות.
+      </p>
+      <p style="color: var(--faint); font-size: 0.92rem; margin-top: 18px">
+        קישור ההצטרפות ייפתח כאן ברגע שהבדיקה הסגורה תתחיל. בינתיים אפשר פשוט להוריד
+        את האפליקציה מהכפתור שלמעלה, וזה עוזר לא פחות.
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2 class="reveal">שאלות ותשובות</h2>
+    <div class="faq">
+      <details>
+        <summary>האם האפליקציה בחינם?</summary>
+        <p>כן, לגמרי. אין פרסומות, אין מנוי, ואין רכישות בתוך האפליקציה. גם לא יהיו.</p>
+      </details>
+      <details>
+        <summary>למה היא לא בחנות של גוגל?</summary>
+        <p>היא בדרך לשם. גוגל דורשת מחשבון מפתח חדש שתים עשרה אנשים יבדקו את האפליקציה ארבעה עשר יום ברצף לפני שמותר לפרסם אותה לכולם. עד שזה יושלם, מתקינים אותה מכאן, וזו בדיוק אותה אפליקציה.</p>
+      </details>
+      <details>
+        <summary>בטוח להתקין קובץ APK?</summary>
+        <p>הקובץ כאן חתום בחתימה שלנו, ואנדרואיד מוודא בעצמו שכל עדכון עתידי נושא בדיוק את אותה חתימה, אחרת הוא מסרב להתקין. גם האפליקציה בודקת את החתימה לפני שהיא מעבירה קובץ להתקנה. האזהרה שאנדרואיד מציג בפעם הראשונה היא האזהרה הרגילה על כל קובץ שלא הגיע מהחנות, ולא סימן לבעיה.</p>
+      </details>
+      <details>
+        <summary>איך מקבלים עדכונים?</summary>
+        <p>מתוך האפליקציה. היא בודקת פעם ביום אם יצאה גרסה חדשה, ואם כן מציעה להוריד ולהתקין במקום. אפשר גם לבדוק ידנית בהגדרות ← עדכונים, ואפשר לכבות את הבדיקה לגמרי.</p>
+      </details>
+      <details>
+        <summary>האפליקציה עוקבת אחריי?</summary>
+        <p>לא. אין חשבון, אין הרשמה, אין אנליטיקה ואין מזהה משתמש. ההיסטוריה נשמרת במכשיר שלך. הגרסה שתגיע לחנות נבנית בלי הרשאת אינטרנט בכלל, והגרסה שמורידים כאן ניגשת לרשת רק לבדיקת עדכונים.</p>
+      </details>
+      <details>
+        <summary>איזה אנדרואיד צריך?</summary>
+        <p>אנדרואיד 8 ומעלה, כלומר כמעט כל טלפון מהשנים האחרונות. לאייפון אין גרסה.</p>
+      </details>
+      <details>
+        <summary>היא נועלת לי את הטלפון?</summary>
+        <p>רק אם תבחר בזה. כברירת מחדל היא מזכירה בהתראה ובווידג׳ט ולא חוסמת כלום. מי שרוצה יכול להפעיל בהגדרות מצב שבו האפליקציה היא מסך הבית ונפתחת אחרי הדיווח, וגם אז אפשר לבטל בכל רגע.</p>
+      </details>
+      <details>
+        <summary>מה קורה להיסטוריה שלי אם אחליף טלפון?</summary>
+        <p>יש שלוש רשתות ביטחון: הגיבוי של אנדרואיד לחשבון Google, תיקיית גיבוי במכשיר שנכתבת אחרי כל שינוי, וייצוא לקובץ שאתה שומר איפה שתרצה ומייבא במכשיר החדש.</p>
+      </details>
+      <details>
+        <summary>יש בה מנהגים שונים?</summary>
+        <p>כן. שלושה נוסחים לסדר ההנחה, בחירה אם מניחים בחול המועד, דקות הדלקת הנרות לפי מנהג המקום, ולוח חגים שונה בארץ ובחו״ל.</p>
+      </details>
+      <details>
+        <summary>מצאתי טעות, או שיש לי רעיון</summary>
+        <p>יופי, זה בדיוק מה שעוזר עכשיו. אפשר לכתוב לכתובת שבמדיניות הפרטיות, ואם זו טעות בטקסט או בזמנים, כדאי לצרף צילום מסך.</p>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="links">
+      <a href="/privacy/">מדיניות פרטיות</a>
+      <a href="/hinachti-1.7.9.apk">הורדת הגרסה האחרונה</a>
+      <a href="/latest.json">קובץ הגרסאות</a>
+    </div>
+    <p>הנחתי · גרסה 1.7.9 · נבנתה בישראל על ידי Y.a.M</p>
+    <p>הזמנים מחושבים במכשיר. האפליקציה אינה תחליף לפסיקה הלכתית.</p>
+  </div>
+</footer>
+
+<div class="bar" id="bar">
+  <a class="btn" href="/hinachti-1.7.9.apk">הורדה לאנדרואיד <small><bdi dir="ltr">1.8 MB</bdi></small></a>
+</div>
+
+<script src="/site.js?v=202609251312" defer></script>
+</body>
+</html>

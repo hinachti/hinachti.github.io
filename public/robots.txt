@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hinachti.gitlab.io/sitemap.xml

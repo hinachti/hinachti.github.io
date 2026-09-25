@@ -1,0 +1,23 @@
+# Publishes public/ with GitLab Pages on every push to the default branch.
+#
+# The job runs on a private project runner on Yam's PC (tag hinachti-pages),
+# because GitLab's own runners need an identity-verified account and instance
+# runners are turned off for this project. tools/publish.ps1 starts that runner
+# for one pipeline right after it pushes.
+#
+# Nothing is built here: tools/build.py already rendered public/ on the PC, so
+# this job only checks the page is there and hands the folder to Pages.
+pages:
+  tags:
+    - hinachti-pages
+  variables:
+    GIT_DEPTH: "1"
+  script:
+    - "if (-not (Test-Path public/index.html)) { Write-Error 'public/index.html is missing'; exit 1 }"
+    - "if (-not (Get-ChildItem public/hinachti-*.apk)) { Write-Error 'no apk in public/'; exit 1 }"
+    - "Get-ChildItem public | Format-Table Name, Length"
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

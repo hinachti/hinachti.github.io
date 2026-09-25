@@ -1,0 +1,525 @@
+/* The site wears the app's own clothes: the same two fonts, the same warm
+   near-black, the same dawn gold. Anyone arriving from a WhatsApp link should
+   recognise the app the moment they open it.
+
+   Colours are lifted from Theme.kt and Accessibility.kt in the app. */
+
+@font-face {
+  font-family: 'Heebo';
+  src: url('/fonts/heebo.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  src: url('/fonts/frank-ruhl-libre.woff2') format('woff2-variations');
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+:root {
+  --bg: #0e0c09;
+  --surface: #17140f;
+  --raised: #211c15;
+  --line: #332c21;
+  --line-soft: #241f18;
+
+  --text: #f0e9db;
+  --dim: #a2957f;
+  --faint: #918471;
+
+  --dawn: #e0a94a;
+  --dawn-deep: #b7822f;
+  --done: #84a55c;
+  --urgent: #db5f3f;
+
+  --sans: 'Heebo', 'Segoe UI', system-ui, sans-serif;
+  --serif: 'Frank Ruhl Libre', 'Times New Roman', serif;
+
+  --page: 1120px;
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.75;
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: var(--dawn); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+:focus-visible {
+  outline: 2px solid var(--dawn);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+/* Hidden without being placed anywhere: parking it at -9999px puts a real box
+   that far off the page, and in a right-to-left document that box sits beyond
+   the right edge and drags the whole layout sideways. */
+.skip {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skip:focus {
+  position: fixed;
+  top: 0;
+  inset-inline-start: 20px;
+  width: auto;
+  height: auto;
+  clip-path: none;
+  background: var(--dawn);
+  color: #171208;
+  padding: 10px 18px;
+  border-radius: 0 0 12px 12px;
+  font-weight: 700;
+  z-index: 50;
+}
+
+/* ---------------------------------------------------------------- hero */
+
+.hero {
+  position: relative;
+  padding: 72px 0 64px;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* The dawn behind the icon. Two radial gradients, because one looks like a
+   spotlight and two look like light. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -240px 0 auto;
+  height: 720px;
+  background:
+    radial-gradient(closest-side, rgba(224, 169, 74, 0.20), transparent 70%),
+    radial-gradient(closest-side, rgba(184, 130, 46, 0.14), transparent 75%);
+  height: 1000px;
+  background-size: 760px 560px, 1400px 820px;
+  background-position: center 300px, center 250px;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* The sun on its path, from the app's own morning screen. It arcs behind the
+   icon; the icon sits where the sun is, which is the point. */
+.arc {
+  position: absolute;
+  top: 34px;
+  left: 50%;
+  translate: -50% 0;
+  width: min(680px, 112vw);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.hero > .wrap { position: relative; }
+
+.applogo {
+  width: 108px;
+  height: 108px;
+  margin-inline: auto;
+  border-radius: 26px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6), 0 0 90px rgba(224, 169, 74, 0.18);
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 11vw, 4.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin: 22px 0 0;
+  letter-spacing: -0.5px;
+  animation: rise 0.9s 0.06s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.tagline {
+  font-size: clamp(1.05rem, 3.6vw, 1.35rem);
+  color: var(--dim);
+  max-width: 34ch;
+  margin: 16px auto 0;
+  animation: rise 0.9s 0.12s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 26px;
+  animation: rise 0.9s 0.18s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 15px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 999px;
+  font-size: 0.86rem;
+  color: var(--dim);
+}
+.pill b { color: var(--text); font-weight: 600; }
+.pill .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--done);
+  box-shadow: 0 0 10px rgba(132, 165, 92, 0.8);
+}
+
+.cta {
+  margin-top: 34px;
+  animation: rise 0.9s 0.24s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(180deg, var(--dawn), var(--dawn-deep));
+  color: #171208;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 1.16rem;
+  padding: 17px 40px;
+  border: 0;
+  border-radius: 16px;
+  box-shadow: 0 14px 34px rgba(224, 169, 74, 0.22);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.btn:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 44px rgba(224, 169, 74, 0.3);
+}
+.btn:active { transform: translateY(0); }
+.btn small { font-weight: 500; opacity: 0.72; font-size: 0.82rem; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--text);
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.btn-ghost:hover { text-decoration: none; border-color: var(--dawn-deep); background: rgba(224, 169, 74, 0.06); }
+
+.req {
+  margin: 18px auto 0;
+  max-width: 46ch;
+  font-size: 0.92rem;
+  color: var(--faint);
+  line-height: 1.7;
+}
+
+/* --------------------------------------------------------- sections */
+
+section { padding: 64px 0; }
+
+h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 5.5vw, 2.5rem);
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.lead {
+  color: var(--dim);
+  margin: 0 0 34px;
+  max-width: 60ch;
+  font-size: 1.02rem;
+}
+
+.eyebrow {
+  color: var(--dawn);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0 0 10px;
+}
+
+/* --------------------------------------------------------- gallery */
+
+/* A strip you drag sideways. It scrolls inside itself rather than being pulled
+   wider than the page: negative margins here put a horizontal scrollbar on the
+   whole document in RTL, which cut the text off on a phone. */
+.shots {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 20px;
+  padding: 6px 20px 26px;
+  max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+.shots::-webkit-scrollbar { height: 8px; }
+.shots::-webkit-scrollbar-thumb { background: var(--line); border-radius: 99px; }
+
+.shot {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  margin: 0;
+  width: 232px;
+}
+.shot img {
+  width: 232px;
+  height: 412px;
+  object-fit: cover;
+  object-position: top;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+.shot figcaption {
+  text-align: center;
+  color: var(--faint);
+  font-size: 0.86rem;
+  margin-top: 12px;
+}
+
+@media (min-width: 900px) {
+  .shots { padding-inline: 0; }
+}
+
+/* --------------------------------------------------------- cards */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: linear-gradient(180deg, var(--surface), rgba(23, 20, 15, 0.4));
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 24px 22px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.card:hover { border-color: var(--line); transform: translateY(-3px); }
+.card h3 {
+  font-family: var(--serif);
+  font-size: 1.22rem;
+  font-weight: 700;
+  margin: 14px 0 8px;
+}
+.card p { margin: 0; color: var(--dim); font-size: 0.97rem; }
+.card svg { width: 26px; height: 26px; stroke: var(--dawn); fill: none; stroke-width: 1.6; }
+
+/* --------------------------------------------------------- the quiet list */
+
+.none {
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(224, 169, 74, 0.07), transparent 60%),
+    var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: 24px;
+  padding: 34px 30px;
+}
+.none ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px 26px;
+}
+.none li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--dim);
+}
+.none li::before {
+  content: '✕';
+  color: var(--urgent);
+  font-size: 0.9rem;
+  flex: 0 0 auto;
+}
+.none .after {
+  margin: 26px 0 0;
+  color: var(--faint);
+  font-size: 0.95rem;
+  max-width: 68ch;
+}
+
+/* --------------------------------------------------------- steps */
+
+.steps { counter-reset: step; display: grid; gap: 14px; max-width: 760px; }
+.step {
+  counter-increment: step;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+}
+.step::before {
+  content: counter(step);
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(224, 169, 74, 0.12);
+  border: 1px solid var(--dawn-deep);
+  color: var(--dawn);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.step p { margin: 0; color: var(--dim); }
+.step b { color: var(--text); font-weight: 600; }
+
+/* --------------------------------------------------------- testers */
+
+.testers {
+  border: 1px solid var(--dawn-deep);
+  background:
+    radial-gradient(120% 160% at 0% 0%, rgba(224, 169, 74, 0.12), transparent 65%),
+    var(--surface);
+  border-radius: 24px;
+  padding: 34px 30px;
+}
+.testers h2 { margin-top: 0; }
+.testers .row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+
+/* --------------------------------------------------------- faq */
+
+.faq { display: grid; gap: 10px; max-width: 860px; }
+details {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  padding: 4px 20px;
+}
+details[open] { border-color: var(--line); }
+summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 16px 0;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after {
+  content: '+';
+  color: var(--dawn);
+  font-size: 1.4rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+details[open] summary::after { transform: rotate(45deg); }
+details p { margin: 0 0 18px; color: var(--dim); font-size: 0.97rem; }
+
+/* --------------------------------------------------------- footer */
+
+footer {
+  border-top: 1px solid var(--line-soft);
+  padding: 40px 0 60px;
+  color: var(--faint);
+  font-size: 0.9rem;
+}
+footer .links { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-bottom: 16px; }
+footer a { color: var(--dim); }
+
+/* ------------------------------------------------- sticky download bar */
+
+.bar {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 40;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(14, 12, 9, 0.92);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  justify-content: center;
+  transform: translateY(110%);
+  transition: transform 0.28s ease;
+}
+.bar.show { transform: none; }
+.bar .btn { padding: 13px 28px; font-size: 1rem; width: min(520px, 100%); }
+
+@media (min-width: 820px) { .bar { display: none; } }
+
+/* --------------------------------------------------------- motion */
+
+/* Hidden only when the script that reveals them is actually running. Written
+   the other way round, a blocked or failed site.js leaves a blank page: every
+   section would sit at opacity 0 with nothing left to turn it on. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.js .reveal.in { opacity: 1; transform: none; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .js .reveal { opacity: 1; transform: none; }
+}
+
+/* --------------------------------------------------------- prose (privacy) */
+
+.prose { max-width: 760px; }
+.prose h2 { margin-top: 42px; font-size: 1.5rem; }
+.prose p, .prose li { color: var(--dim); }
+.prose ul { padding-inline-start: 22px; }
+.prose .updated { color: var(--faint); font-size: 0.9rem; }
