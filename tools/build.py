@@ -29,9 +29,16 @@ TEMPLATES = SITE / "templates"
 # It stays where it is for ever, because every installed copy points at it.
 RELEASES = SITE.parent / "hinachti-releases"
 
-# Where the contact line in the privacy policy points. Kept in one place so it
-# can be swapped for a neutral address without touching the page.
-CONTACT_EMAIL = "yamking100@gmail.com"
+# The contact line in the privacy policy. A personal address never goes on a
+# public page: this takes a neutral one (hinachti.app@gmail.com or similar) when
+# there is one, and until then the page says how to get in touch without it.
+CONTACT_EMAIL = ""
+
+CONTACT_FALLBACK = (
+    "אין כאן כתובת אישית. אם משהו באפליקציה לא בסדר, או שיש לך שאלה על "
+    "הפרטיות, אפשר לפנות דרך האדם שממנו קיבלת את הקישור, וברגע שהאפליקציה "
+    "תהיה בחנות תופיע גם כתובת ליצירת קשר בדף שלה ב-Google Play."
+)
 
 # Google Play closed testing. Fill both in once the closed track is open, and
 # the tester section appears on the page by itself; leave them empty and the
@@ -266,7 +273,18 @@ def main() -> None:
     privacy = PUBLIC / "privacy"
     privacy.mkdir(exist_ok=True)
     (privacy / "index.html").write_text(
-        render("privacy.html", {"SITE": SITE_URL, "STAMP": stamp, "CONTACT": CONTACT_EMAIL}),
+        render(
+            "privacy.html",
+            {
+                "SITE": SITE_URL,
+                "STAMP": stamp,
+                "CONTACT": (
+                    f'<a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>'
+                    if CONTACT_EMAIL
+                    else CONTACT_FALLBACK
+                ),
+            },
+        ),
         encoding="utf-8",
     )
 
