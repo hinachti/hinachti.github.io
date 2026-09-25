@@ -544,6 +544,88 @@ footer a { color: var(--dim); }
 
 @media (min-width: 820px) { .bar { display: none; } }
 
+/* ------------------------------------------------- daybreak, one clock
+ *
+ * Everything moving on this page is driven by a single number: --scroll, from
+ * 0 at the top to 1 at the bottom, written once per frame by site.js. The sun
+ * climbs it, the sky warms with it, the bar at the top fills with it. One
+ * clock, so nothing looks like it is moving to its own beat.
+ *
+ * The idea is the app's own: its morning screen draws the sun on the day's
+ * path, over a bar showing how much of the window is left.
+ */
+
+.progress {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 2px;
+  z-index: 60;
+  pointer-events: none;
+}
+.progress i {
+  display: block;
+  height: 100%;
+  width: calc(var(--scroll, 0) * 100%);
+  background: linear-gradient(to left, var(--dawn-deep), var(--dawn));
+  box-shadow: 0 0 12px rgba(224, 169, 74, 0.5);
+}
+
+/* The warmth behind everything: fixed, decorative, never over text. */
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 60% at 50% 108%, rgba(224, 169, 74, 0.16), transparent 70%),
+    radial-gradient(90% 50% at 50% 100%, rgba(219, 95, 63, 0.09), transparent 70%);
+  opacity: calc(0.12 + var(--scroll, 0) * 0.88);
+  will-change: opacity;
+}
+
+/* The sun, climbing the dotted path behind the icon as you read. */
+.sun {
+  position: absolute;
+  top: 96px;
+  left: 50%;
+  width: 104px;
+  height: 104px;
+  margin: -52px 0 0 -52px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(243, 207, 133, 0.5), rgba(224, 169, 74, 0.14) 45%, transparent 70%);
+  /* Sideways with the scroll, with a shallow rise and fall over the arc. */
+  transform:
+    translateX(calc(var(--scroll, 0) * -300px))
+    translateY(calc(var(--scroll, 0) * 140px - var(--arch, 0) * 110px));
+  will-change: transform;
+}
+
+/* --------------------------------------------------------- stats */
+
+.stats-band { padding-block: 30px 10px; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
+  gap: 12px;
+  padding: 24px 18px;
+  border: 1px solid var(--line-soft);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(23, 20, 15, 0.9), rgba(23, 20, 15, 0.3));
+}
+.stat { text-align: center; }
+.stat b {
+  display: block;
+  font-family: var(--serif);
+  font-size: clamp(1.7rem, 5vw, 2.2rem);
+  font-weight: 700;
+  color: var(--dawn);
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.stat span { font-size: 0.86rem; color: var(--faint); }
+
 /* --------------------------------------------------------- motion */
 
 /* Hidden only when the script that reveals them is actually running. Written
@@ -555,6 +637,104 @@ footer a { color: var(--dim); }
   transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .js .reveal.in { opacity: 1; transform: none; }
+
+/* One wave, not twenty separate arrivals: each item in a group waits its turn
+   by index, so a row of cards lands like a sentence rather than confetti. */
+.js .reveal { transition-delay: calc(var(--i, 0) * 70ms); }
+
+/* A gold rule that draws itself under a heading as the heading arrives. */
+h2 { position: relative; }
+.js h2.reveal::after,
+.js .card.reveal h3::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: -8px;
+  height: 2px;
+  width: 54px;
+  border-radius: 2px;
+  background: linear-gradient(to left, var(--dawn), transparent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.7s 0.15s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.js h2.reveal.in::after { transform: scaleX(1); }
+.js .card.reveal h3::after { display: none; }
+
+/* Cards lean a little towards the pointer. The angle is tiny on purpose: it
+   should read as material catching the light, not as a toy. */
+.card {
+  transform-style: preserve-3d;
+  position: relative;
+  overflow: hidden;
+}
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), rgba(224, 169, 74, 0.10), transparent 70%);
+}
+.card:hover::after { opacity: 1; }
+.card:hover svg { stroke: var(--dawn); filter: drop-shadow(0 0 8px rgba(224, 169, 74, 0.45)); }
+.card svg { transition: filter 0.25s ease, stroke 0.25s ease; }
+
+/* A slow sheen over the download button, like light moving across metal. */
+.btn { position: relative; overflow: hidden; }
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 42%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-18deg);
+  animation: sheen 6.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes sheen {
+  0%, 68% { inset-inline-start: -55%; }
+  88%, 100% { inset-inline-start: 115%; }
+}
+
+/* The icon breathes while nothing else is happening, the way a lamp does. */
+.applogo { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both, breathe 7s 1s ease-in-out infinite; }
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6), 0 0 90px rgba(224, 169, 74, 0.18); }
+  50% { box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6), 0 0 120px rgba(224, 169, 74, 0.30); }
+}
+
+/* The dotted path drifts, so the sun has something to move along. */
+.arc path { animation: drift 34s linear infinite; }
+@keyframes drift { to { stroke-dashoffset: -280; } }
+
+/* The answer unfolds instead of appearing. grid-template-rows is the one way
+   to animate to a height nobody knows in advance. */
+details { overflow: hidden; }
+details .answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.34s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+details[open] .answer { grid-template-rows: 1fr; }
+details .answer > div { overflow: hidden; }
+summary:hover { color: var(--dawn); }
+
+/* The screenshot nearest the middle of the strip stands slightly forward.
+   Browsers without scroll-driven animation simply show them all flat. */
+@supports (animation-timeline: view(inline)) {
+  .js .shot img {
+    animation: focus-card linear both;
+    animation-timeline: view(inline);
+    animation-range: entry 8% exit 92%;
+  }
+  @keyframes focus-card {
+    0%, 100% { transform: scale(0.94); opacity: 0.72; }
+    50% { transform: scale(1); opacity: 1; }
+  }
+}
 
 @keyframes rise {
   from { opacity: 0; transform: translateY(18px); }

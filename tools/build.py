@@ -154,10 +154,12 @@ def shots_html() -> str:
 def faq_html() -> str:
     out = []
     for question, answer in FAQ:
+        # The extra wrapper is what lets the answer unfold: a grid row can be
+        # animated from 0fr to 1fr, a height of "auto" cannot.
         out.append(
             f"      <details>\n"
             f"        <summary>{html.escape(question)}</summary>\n"
-            f"        <p>{html.escape(answer)}</p>\n"
+            f"        <div class=\"answer\"><div><p>{html.escape(answer)}</p></div></div>\n"
             f"      </details>"
         )
     return "\n".join(out).strip()

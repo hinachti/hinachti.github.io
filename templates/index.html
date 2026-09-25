@@ -56,11 +56,20 @@
 <body>
 <a class="skip" href="#main">דלג לתוכן</a>
 
+<!-- The reading position, drawn like the bar the app puts over the morning:
+     how much of the window is behind you. -->
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<!-- Daybreak. It warms as you read down the page, and it is the one clock the
+     rest of the motion is set by. -->
+<div class="sky" aria-hidden="true"></div>
+
 <header class="hero">
   <svg class="arc" viewBox="0 0 760 240" aria-hidden="true" focusable="false">
     <path d="M40 220 Q380 -10 720 220" fill="none" stroke="#b7822f" stroke-width="2"
           stroke-linecap="round" stroke-dasharray="2 12" opacity="0.7"/>
   </svg>
+  <div class="sun" aria-hidden="true"></div>
 
   <div class="wrap">
     <img class="applogo" src="/img/icon-192.png" width="108" height="108"
@@ -86,6 +95,16 @@
 </header>
 
 <main id="main">
+
+  <section class="wrap stats-band">
+    <div class="stats reveal">
+      <div class="stat"><b data-count="150">150</b><span>פרקי תהילים</span></div>
+      <div class="stat"><b data-count="378">378</b><span>הסברים לעליות</span></div>
+      <div class="stat"><b data-count="54">54</b><span>ערים בארץ ובעולם</span></div>
+      <div class="stat"><b data-count="3">3</b><span>נוסחים לסדר ההנחה</span></div>
+      <div class="stat"><b data-count="0">0</b><span>פרסומות</span></div>
+    </div>
+  </section>
 
   <section class="wrap">
     <p class="eyebrow reveal">מה חדש בגרסה {{VERSION}}</p>

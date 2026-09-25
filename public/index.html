@@ -26,7 +26,7 @@
 <link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/img/icon-180.png">
 <link rel="preload" href="/fonts/heebo.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/site.css?v=202609251413">
+<link rel="stylesheet" href="/site.css?v=202609251421">
 <script>document.documentElement.className += ' js';</script>
 
 <script type="application/ld+json">
@@ -141,11 +141,20 @@
 <body>
 <a class="skip" href="#main">דלג לתוכן</a>
 
+<!-- The reading position, drawn like the bar the app puts over the morning:
+     how much of the window is behind you. -->
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<!-- Daybreak. It warms as you read down the page, and it is the one clock the
+     rest of the motion is set by. -->
+<div class="sky" aria-hidden="true"></div>
+
 <header class="hero">
   <svg class="arc" viewBox="0 0 760 240" aria-hidden="true" focusable="false">
     <path d="M40 220 Q380 -10 720 220" fill="none" stroke="#b7822f" stroke-width="2"
           stroke-linecap="round" stroke-dasharray="2 12" opacity="0.7"/>
   </svg>
+  <div class="sun" aria-hidden="true"></div>
 
   <div class="wrap">
     <img class="applogo" src="/img/icon-192.png" width="108" height="108"
@@ -171,6 +180,16 @@
 </header>
 
 <main id="main">
+
+  <section class="wrap stats-band">
+    <div class="stats reveal">
+      <div class="stat"><b data-count="150">150</b><span>פרקי תהילים</span></div>
+      <div class="stat"><b data-count="378">378</b><span>הסברים לעליות</span></div>
+      <div class="stat"><b data-count="54">54</b><span>ערים בארץ ובעולם</span></div>
+      <div class="stat"><b data-count="3">3</b><span>נוסחים לסדר ההנחה</span></div>
+      <div class="stat"><b data-count="0">0</b><span>פרסומות</span></div>
+    </div>
+  </section>
 
   <section class="wrap">
     <p class="eyebrow reveal">מה חדש בגרסה 1.7.9</p>
@@ -356,43 +375,43 @@
     <div class="faq">
       <details>
         <summary>האם האפליקציה בחינם?</summary>
-        <p>כן, לגמרי. אין פרסומות, אין מנוי, ואין רכישות בתוך האפליקציה. גם לא יהיו.</p>
+        <div class="answer"><div><p>כן, לגמרי. אין פרסומות, אין מנוי, ואין רכישות בתוך האפליקציה. גם לא יהיו.</p></div></div>
       </details>
       <details>
         <summary>למה היא לא בחנות של גוגל?</summary>
-        <p>היא בדרך לשם. גוגל דורשת מחשבון מפתח חדש שתים עשרה אנשים יבדקו את האפליקציה ארבעה עשר יום ברצף לפני שמותר לפרסם אותה לכולם. עד שזה יושלם, מתקינים אותה מכאן, וזו בדיוק אותה אפליקציה.</p>
+        <div class="answer"><div><p>היא בדרך לשם. גוגל דורשת מחשבון מפתח חדש שתים עשרה אנשים יבדקו את האפליקציה ארבעה עשר יום ברצף לפני שמותר לפרסם אותה לכולם. עד שזה יושלם, מתקינים אותה מכאן, וזו בדיוק אותה אפליקציה.</p></div></div>
       </details>
       <details>
         <summary>בטוח להתקין קובץ APK?</summary>
-        <p>הקובץ כאן חתום בחתימה שלנו, ואנדרואיד מוודא בעצמו שכל עדכון עתידי נושא בדיוק את אותה חתימה, אחרת הוא מסרב להתקין. גם האפליקציה בודקת את החתימה לפני שהיא מעבירה קובץ להתקנה. האזהרה שאנדרואיד מציג בפעם הראשונה היא האזהרה הרגילה על כל קובץ שלא הגיע מהחנות, ולא סימן לבעיה.</p>
+        <div class="answer"><div><p>הקובץ כאן חתום בחתימה שלנו, ואנדרואיד מוודא בעצמו שכל עדכון עתידי נושא בדיוק את אותה חתימה, אחרת הוא מסרב להתקין. גם האפליקציה בודקת את החתימה לפני שהיא מעבירה קובץ להתקנה. האזהרה שאנדרואיד מציג בפעם הראשונה היא האזהרה הרגילה על כל קובץ שלא הגיע מהחנות, ולא סימן לבעיה.</p></div></div>
       </details>
       <details>
         <summary>איך מקבלים עדכונים?</summary>
-        <p>מתוך האפליקציה. היא בודקת פעם ביום אם יצאה גרסה חדשה, ואם כן מציעה להוריד ולהתקין במקום. אפשר גם לבדוק ידנית בהגדרות ← עדכונים, ואפשר לכבות את הבדיקה לגמרי.</p>
+        <div class="answer"><div><p>מתוך האפליקציה. היא בודקת פעם ביום אם יצאה גרסה חדשה, ואם כן מציעה להוריד ולהתקין במקום. אפשר גם לבדוק ידנית בהגדרות ← עדכונים, ואפשר לכבות את הבדיקה לגמרי.</p></div></div>
       </details>
       <details>
         <summary>האפליקציה עוקבת אחריי?</summary>
-        <p>לא. אין חשבון, אין הרשמה, אין אנליטיקה ואין מזהה משתמש. ההיסטוריה נשמרת במכשיר שלך. הגרסה שתגיע לחנות נבנית בלי הרשאת אינטרנט בכלל, והגרסה שמורידים כאן ניגשת לרשת רק לבדיקת עדכונים.</p>
+        <div class="answer"><div><p>לא. אין חשבון, אין הרשמה, אין אנליטיקה ואין מזהה משתמש. ההיסטוריה נשמרת במכשיר שלך. הגרסה שתגיע לחנות נבנית בלי הרשאת אינטרנט בכלל, והגרסה שמורידים כאן ניגשת לרשת רק לבדיקת עדכונים.</p></div></div>
       </details>
       <details>
         <summary>איזה אנדרואיד צריך?</summary>
-        <p>אנדרואיד 8 ומעלה, כלומר כמעט כל טלפון מהשנים האחרונות. לאייפון אין גרסה.</p>
+        <div class="answer"><div><p>אנדרואיד 8 ומעלה, כלומר כמעט כל טלפון מהשנים האחרונות. לאייפון אין גרסה.</p></div></div>
       </details>
       <details>
         <summary>היא נועלת לי את הטלפון?</summary>
-        <p>רק אם תבחר בזה. כברירת מחדל היא מזכירה בהתראה ובווידג׳ט ולא חוסמת כלום. מי שרוצה יכול להפעיל בהגדרות מצב שבו האפליקציה היא מסך הבית ונפתחת אחרי הדיווח, וגם אז אפשר לבטל בכל רגע.</p>
+        <div class="answer"><div><p>רק אם תבחר בזה. כברירת מחדל היא מזכירה בהתראה ובווידג׳ט ולא חוסמת כלום. מי שרוצה יכול להפעיל בהגדרות מצב שבו האפליקציה היא מסך הבית ונפתחת אחרי הדיווח, וגם אז אפשר לבטל בכל רגע.</p></div></div>
       </details>
       <details>
         <summary>מה קורה להיסטוריה שלי אם אחליף טלפון?</summary>
-        <p>יש שלוש רשתות ביטחון: הגיבוי של אנדרואיד לחשבון Google, תיקיית גיבוי במכשיר שנכתבת אחרי כל שינוי, וייצוא לקובץ שאתה שומר איפה שתרצה ומייבא במכשיר החדש.</p>
+        <div class="answer"><div><p>יש שלוש רשתות ביטחון: הגיבוי של אנדרואיד לחשבון Google, תיקיית גיבוי במכשיר שנכתבת אחרי כל שינוי, וייצוא לקובץ שאתה שומר איפה שתרצה ומייבא במכשיר החדש.</p></div></div>
       </details>
       <details>
         <summary>יש בה מנהגים שונים?</summary>
-        <p>כן. שלושה נוסחים לסדר ההנחה, בחירה אם מניחים בחול המועד, דקות הדלקת הנרות לפי מנהג המקום, ולוח חגים שונה בארץ ובחו״ל.</p>
+        <div class="answer"><div><p>כן. שלושה נוסחים לסדר ההנחה, בחירה אם מניחים בחול המועד, דקות הדלקת הנרות לפי מנהג המקום, ולוח חגים שונה בארץ ובחו״ל.</p></div></div>
       </details>
       <details>
         <summary>מצאתי טעות, או שיש לי רעיון</summary>
-        <p>יופי, זה בדיוק מה שעוזר עכשיו. אפשר לכתוב לכתובת שבמדיניות הפרטיות, ואם זו טעות בטקסט או בזמנים, כדאי לצרף צילום מסך.</p>
+        <div class="answer"><div><p>יופי, זה בדיוק מה שעוזר עכשיו. אפשר לכתוב לכתובת שבמדיניות הפרטיות, ואם זו טעות בטקסט או בזמנים, כדאי לצרף צילום מסך.</p></div></div>
       </details>
     </div>
   </section>
@@ -415,6 +434,6 @@
   <a class="btn" href="/hinachti-1.7.9.apk">הורדה לאנדרואיד <small><bdi dir="ltr">1.8 MB</bdi></small></a>
 </div>
 
-<script src="/site.js?v=202609251413" defer></script>
+<script src="/site.js?v=202609251421" defer></script>
 </body>
 </html>
