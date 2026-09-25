@@ -9,7 +9,7 @@ commits here use the neutral identity `Hinachti <noreply@hinachti.github.io>`.
 | --- | --- | --- |
 | App source | GitLab `yamking100/hinachti` | private |
 | Apks + `latest.json` the app polls | GitLab `yamking100/hinachti-releases` | **public** (installed apps read it) |
-| This site | GitLab `hinachti/hinachti.gitlab.io` | project **private**, Pages **Everyone** |
+| This site | GitHub `hinachti/hinachti.github.io` | public (GitHub Pages needs it) |
 
 **The releases project never moves.** Every installed copy of the app checks
 `https://gitlab.com/yamking100/hinachti-releases/-/raw/main/latest.json`. Renaming
@@ -30,22 +30,14 @@ waits until <https://hinachti.gitlab.io/latest.json> reports the new version.
 For a change to the page itself rather than a new app version, pass a message:
 `.\tools\publish.ps1 -Message "FAQ update"`.
 
-### The runner
+### Why GitHub and not GitLab Pages
 
-GitLab's own CI runners need an identity-verified account, so instance runners
-are off for this project and a private project runner does the job: name
-"Hinachti site", tag `hinachti-pages`, shell executor, Windows PowerShell. It is
-**not** installed as a service; `publish.ps1` starts
-`%USERPROFILE%\.gitlab-runner\gitlab-runner.exe` for one job and stops it.
-`config.toml` next to it holds the runner token and must never be committed.
-
-Registering it once (token from Settings → CI/CD → Runners in the project):
-
-```powershell
-cd $env:USERPROFILE\.gitlab-runner
-.\gitlab-runner.exe register --url https://gitlab.com/ --token <TOKEN> `
-  --executor shell --shell powershell --name "Hinachti site"
-```
+GitLab now refuses to run a pipeline for a new project until the account passes
+identity verification, and GitLab Pages cannot deploy without a pipeline (there
+is no upload API). The verification SMS never arrived. GitHub Pages needs no
+verification, so the site lives in the `hinachti` GitHub organisation, which is
+also what keeps the address free of a personal username. `.gitlab-ci.yml` is
+kept for the day that changes.
 
 ## What is in here
 
