@@ -2,5 +2,5 @@
   "versionCode": 10709,
   "versionName": "1.7.9",
   "notes": "גיבוי לתיקייה שהפסיק לעבוד אחרי התקנה מחדש מוצג עכשיו בבירור, עם כפתור לאשר את התיקייה שוב. המסך מותאם לאנדרואיד 15 ו-16, כולל טלפונים עם חור למצלמה. ובלוח השנה, יום שסימנת שלא הנחת מופיע כ״לא הונח״.",
-  "url": "https://gitlab.com/yamking100/hinachti-releases/-/raw/main/hinachti-1.7.9.apk?inline=false"
+  "url": "https://hinachti.gitlab.io/hinachti-1.7.9.apk"
 }

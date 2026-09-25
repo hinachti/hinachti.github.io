@@ -237,8 +237,15 @@ def main() -> None:
             old.unlink()
     shutil.copy2(rel["apk"], PUBLIC / apk_name)
 
-    # Verbatim, so the file the page links to is the file the app reads.
-    shutil.copy2(RELEASES / "latest.json", PUBLIC / "latest.json")
+    # The same version file, pointed at this site's own copy of the apk. Only
+    # the url differs from the releases project's file: that one names the
+    # releases project, which carries a personal username, and nothing public
+    # here should. The app keeps reading its own file, not this one.
+    version_file = json.loads((RELEASES / "latest.json").read_text(encoding="utf-8"))
+    version_file["url"] = f"{SITE_URL}/{apk_name}"
+    (PUBLIC / "latest.json").write_text(
+        json.dumps(version_file, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
 
     values = {
         "SITE": SITE_URL,
