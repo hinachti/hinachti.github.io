@@ -1,7 +1,7 @@
 """Turns a screen recording of the app into the frames the page scrubs.
 
     # 1. record on the emulator (morning state, nothing marked yet)
-    adb shell screenrecord --size 540x1200 --bit-rate 6000000 --time-limit 12 /sdcard/rec.mp4
+    adb shell screenrecord --bit-rate 16000000 --time-limit 12 /sdcard/rec.mp4
     #    while it records: wait, tap "הנחתי" (540,1880), tap "כן, הנחתי" (540,1297)
     adb pull /sdcard/rec.mp4 rec.mp4
 
@@ -29,10 +29,13 @@ OUT = SITE / "public" / "reel"
 
 # The status bar carries the emulator's own clock, which is not the app's, so
 # the top 60px of the 540x1200 recording is cropped away.
-CROP = "crop=540:1140:0:60"
+# Recorded at the device's own 1080x2400 and scaled down, which is the only
+# way the Hebrew comes out sharp on a retina screen: upscaling a small capture
+# just smears it.
+CROP = "crop=1080:2280:0:120"
 FPS = 10
-WIDTH = 380
-QUALITY = 72
+WIDTH = 760
+QUALITY = 76
 # Every second frame: still fluid under a thumb, half the bytes.
 KEEP_EVERY = 2
 
