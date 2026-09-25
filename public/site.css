@@ -106,11 +106,17 @@ a:hover { text-decoration: underline; }
 
 /* ---------------------------------------------------------------- hero */
 
+/* The first screen is the hero and the numbers, and nothing else. On a tall
+   monitor the hero grows so the stats band ends exactly at the fold; without
+   this the top of the reel's phone peeked in under the numbers and the first
+   view looked unfinished. On a phone or a laptop the hero is already taller
+   than this, so the rule changes nothing there. */
 .hero {
   position: relative;
   padding: 72px 0 64px;
   text-align: center;
   overflow: hidden;
+  min-height: calc(100svh - var(--band, 160px));
 }
 
 /* The dawn behind the icon. Two radial gradients, because one looks like a
