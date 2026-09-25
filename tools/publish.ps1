@@ -1,7 +1,7 @@
 # Publishes the site: render, commit, push. GitHub Pages does the rest.
 #
-#   .	ools\publish.ps1                       # after a new app release
-#   .	ools\publish.ps1 -Message "FAQ update" # after editing the page itself
+#   tools\publish.ps1                       # after a new app release
+#   tools\publish.ps1 -Message "FAQ update" # after editing the page itself
 #
 # The version, the release notes, the download link and the apk all come from
 # ..\hinachti-releases\latest.json, which is the same file the installed app

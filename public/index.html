@@ -26,7 +26,7 @@
 <link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/img/icon-180.png">
 <link rel="preload" href="/fonts/heebo.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/site.css?v=202609251404">
+<link rel="stylesheet" href="/site.css?v=202609251413">
 <script>document.documentElement.className += ' js';</script>
 
 <script type="application/ld+json">
@@ -183,8 +183,12 @@
       <p class="lead reveal">שמונה מסכים מתוך האפליקציה. אפשר לגרור הצידה.</p>
     </div>
     <div class="wrap">
-      <div class="shots">
-        <figure class="shot">
+      <div class="gallery">
+        <button class="nav prev" type="button" aria-label="המסכים הקודמים" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="shots" id="shots" tabindex="0" role="group" aria-label="צילומי מסך מהאפליקציה">
+          <figure class="shot">
         <img src="/img/morning.webp" srcset="/img/morning.webp 540w, /img/morning@2x.webp 1080w"
              sizes="232px" width="232" height="412" loading="lazy" decoding="async"
              alt="מסך הבוקר: השעה, השבוע האחרון, הזמן שנותר עד סוף זמן תפילה וכפתור «הנחתי»">
@@ -232,6 +236,10 @@
              alt="תהילים פרק יג בניקוד מלא, פסוק בכל שורה">
         <figcaption>פרק מנוקד</figcaption>
       </figure>
+        </div>
+        <button class="nav next" type="button" aria-label="המסכים הבאים" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
       </div>
     </div>
   </section>
@@ -407,6 +415,6 @@
   <a class="btn" href="/hinachti-1.7.9.apk">הורדה לאנדרואיד <small><bdi dir="ltr">1.8 MB</bdi></small></a>
 </div>
 
-<script src="/site.js?v=202609251404" defer></script>
+<script src="/site.js?v=202609251413" defer></script>
 </body>
 </html>

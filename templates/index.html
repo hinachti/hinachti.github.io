@@ -98,8 +98,16 @@
       <p class="lead reveal">שמונה מסכים מתוך האפליקציה. אפשר לגרור הצידה.</p>
     </div>
     <div class="wrap">
-      <div class="shots">
-        {{SHOTS}}
+      <div class="gallery">
+        <button class="nav prev" type="button" aria-label="המסכים הקודמים" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="shots" id="shots" tabindex="0" role="group" aria-label="צילומי מסך מהאפליקציה">
+          {{SHOTS}}
+        </div>
+        <button class="nav next" type="button" aria-label="המסכים הבאים" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
       </div>
     </div>
   </section>

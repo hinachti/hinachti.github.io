@@ -119,11 +119,10 @@ a:hover { text-decoration: underline; }
   content: '';
   position: absolute;
   inset: -240px 0 auto;
-  height: 720px;
+  height: 1000px;
   background:
     radial-gradient(closest-side, rgba(224, 169, 74, 0.20), transparent 70%),
     radial-gradient(closest-side, rgba(184, 130, 46, 0.14), transparent 75%);
-  height: 1000px;
   background-size: 760px 560px, 1400px 820px;
   background-position: center 300px, center 250px;
   background-repeat: no-repeat;
@@ -279,9 +278,15 @@ h2 {
 
 /* --------------------------------------------------------- gallery */
 
+.gallery { position: relative; }
+
 /* A strip you drag sideways. It scrolls inside itself rather than being pulled
    wider than the page: negative margins here put a horizontal scrollbar on the
-   whole document in RTL, which cut the text off on a phone. */
+   whole document in RTL, which cut the text off on a phone.
+
+   The scrollbar is hidden because the arrows say the same thing better, and the
+   edges fade so a half-cut phone reads as "there is more" rather than as a
+   mistake. */
 .shots {
   display: flex;
   gap: 18px;
@@ -290,11 +295,60 @@ h2 {
   scroll-padding-inline: 20px;
   padding: 6px 20px 26px;
   max-width: 100%;
-  scrollbar-width: thin;
-  scrollbar-color: var(--line) transparent;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  mask-image: linear-gradient(to left, transparent 0, #000 42px, #000 calc(100% - 42px), transparent 100%);
 }
-.shots::-webkit-scrollbar { height: 8px; }
-.shots::-webkit-scrollbar-thumb { background: var(--line); border-radius: 99px; }
+.shots::-webkit-scrollbar { display: none; }
+.shots:focus-visible { outline: 2px solid var(--dawn); outline-offset: 4px; border-radius: 22px; }
+
+/* The arrows. 48px, which clears the 44px a thumb needs, and they are buttons
+   rather than hover-only decoration so they work on a phone too. */
+.nav {
+  position: absolute;
+  top: 190px;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--dawn);
+  background: rgba(23, 20, 15, 0.72);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+  transition: transform 0.18s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.18s ease,
+              background 0.18s ease, box-shadow 0.18s ease, opacity 0.25s ease;
+}
+.nav svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.nav.prev { inset-inline-end: -6px; }
+.nav.next { inset-inline-start: -6px; }
+
+.nav:hover {
+  transform: scale(1.09);
+  border-color: var(--dawn-deep);
+  background: rgba(43, 37, 28, 0.85);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6), 0 0 26px rgba(224, 169, 74, 0.25);
+}
+.nav:active { transform: scale(0.95); }
+.nav:disabled { opacity: 0; pointer-events: none; }
+
+/* A slow breath on the arrow that still has somewhere to go, so it reads as an
+   invitation. It stops for good once the strip has been moved. */
+.gallery:not(.touched) .nav.next:not(:disabled) { animation: nudge 2.6s ease-in-out infinite; }
+@keyframes nudge {
+  0%, 62%, 100% { transform: none; }
+  78% { transform: translateX(4px); }
+}
+
+@media (max-width: 720px) {
+  .nav { width: 44px; height: 44px; top: 160px; }
+  .nav.prev { inset-inline-end: 0; }
+  .nav.next { inset-inline-start: 0; }
+}
 
 .shot {
   flex: 0 0 auto;
@@ -497,7 +551,7 @@ footer a { color: var(--dim); }
    section would sit at opacity 0 with nothing left to turn it on. */
 .js .reveal {
   opacity: 0;
-  transform: translateY(22px);
+  transform: translateY(14px);
   transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .js .reveal.in { opacity: 1; transform: none; }
