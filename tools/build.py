@@ -19,7 +19,7 @@ import shutil
 import sys
 from pathlib import Path
 
-SITE_URL = "https://hinachti.gitlab.io"
+SITE_URL = "https://hinachti.github.io"
 
 SITE = Path(__file__).resolve().parent.parent
 PUBLIC = SITE / "public"

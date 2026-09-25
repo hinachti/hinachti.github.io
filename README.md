@@ -1,9 +1,9 @@
-# hinachti.gitlab.io
+# hinachti.github.io
 
-The public download page for **הנחתי**: <https://hinachti.gitlab.io/>
+The public download page for **הנחתי**: <https://hinachti.github.io/>
 
 It carries no personal details. The only credit is "Created by Y.a.M", and
-commits here use the neutral identity `Hinachti <noreply@hinachti.gitlab.io>`.
+commits here use the neutral identity `Hinachti <noreply@hinachti.github.io>`.
 
 | What | Where | Visibility |
 | --- | --- | --- |

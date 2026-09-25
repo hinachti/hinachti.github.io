@@ -1,0 +1,41 @@
+# Publishes public/ to GitHub Pages on every push to main.
+#
+# GitHub Pages can serve the repository root or /docs, and the site lives in
+# public/ so the same folder works on GitLab Pages too. This workflow uploads
+# that folder instead, which keeps one layout for both hosts.
+#
+# Nothing is built here: tools/build.py already rendered public/ on the PC.
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: The page and the apk have to be there
+        run: |
+          test -f public/index.html
+          ls public/hinachti-*.apk
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - id: deployment
+        uses: actions/deploy-pages@v4
