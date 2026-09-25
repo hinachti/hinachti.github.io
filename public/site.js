@@ -165,6 +165,97 @@
     for (var c = 0; c < counters.length; c++) counterSeen.observe(counters[c]);
   }
 
+  // --- the reel: a recording of the app, scrubbed by the scroll ------------
+  //
+  // Thirty-four stills rather than a video: a video that is seeked rather than
+  // played stutters, and iOS will not always seek one at all. The frames are
+  // fetched only when the section is close, and a reader who asked for less
+  // motion, or is on a metered connection, keeps the still image.
+  var reel = document.getElementById('reel');
+  if (reel) {
+    var canvas = reel.querySelector('.reel-canvas');
+    var poster = reel.querySelector('.reel-poster');
+    var steps = reel.querySelectorAll('.reel-steps li');
+    var COUNT = 34;
+    var saveData = navigator.connection && navigator.connection.saveData;
+
+    if (reduced || saveData || !canvas.getContext) {
+      canvas.remove();
+    } else {
+      var ctx = canvas.getContext('2d', { alpha: false });
+      var frames = new Array(COUNT);
+      var ready = 0;
+      var shown = -1;
+
+      var draw = function (index) {
+        var image = frames[index];
+        if (!image || index === shown) return;
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        shown = index;
+      };
+
+      var position = function () {
+        var box = reel.getBoundingClientRect();
+        var travel = reel.offsetHeight - window.innerHeight;
+        if (travel <= 0) return 0;
+        return Math.min(1, Math.max(0, -box.top / travel));
+      };
+
+      var reelTick = false;
+      var updateReel = function () {
+        reelTick = false;
+        var p = position();
+        // The last stretch is the app's own animation settling, so the frames
+        // are spread over the first 88% and the end simply holds.
+        var index = Math.round(Math.min(1, p / 0.88) * (COUNT - 1));
+        draw(index);
+        for (var s = 0; s < steps.length; s++) {
+          var at = parseFloat(steps[s].getAttribute('data-at'));
+          var nextAt = s + 1 < steps.length ? parseFloat(steps[s + 1].getAttribute('data-at')) : 2;
+          steps[s].classList.toggle('on', p >= at && p < nextAt);
+        }
+      };
+
+      var onReelScroll = function () {
+        if (reelTick) return;
+        reelTick = true;
+        requestAnimationFrame(updateReel);
+      };
+
+      var load = function () {
+        for (var f = 0; f < COUNT; f++) {
+          (function (index) {
+            var image = new Image();
+            image.decoding = 'async';
+            image.src = '/reel/' + (index < 10 ? '0' : '') + index + '.webp';
+            image.onload = function () {
+              frames[index] = image;
+              ready++;
+              if (index === 0) draw(0);
+              if (ready === COUNT) updateReel();
+            };
+          })(f);
+        }
+        window.addEventListener('scroll', onReelScroll, { passive: true });
+        window.addEventListener('resize', onReelScroll);
+      };
+
+      if ('IntersectionObserver' in window) {
+        var near = new IntersectionObserver(function (entries) {
+          if (!entries[0].isIntersecting) return;
+          near.disconnect();
+          load();
+        }, { rootMargin: '400px 0px' });
+        near.observe(reel);
+      } else {
+        load();
+      }
+
+      // The still underneath is what shows until the first frame is decoded.
+      if (poster) poster.setAttribute('aria-hidden', 'true');
+    }
+  }
+
   // --- light follows the pointer across a card -----------------------------
   //
   // Pointer only: a finger has no hover, and a card that lights up under a

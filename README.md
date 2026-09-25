@@ -47,7 +47,8 @@ kept for the day that changes.
 | `templates/privacy.html` | the privacy policy page |
 | `tools/build.py` | fills the placeholders from `latest.json`, copies the apk, writes `robots.txt` and `sitemap.xml` |
 | `tools/make-assets.py` | fonts, icons, screenshots and the link preview image, from the app's own files. Run again only when the app's look changes |
-| `tools/publish.ps1` | render, commit, push, run the Pages job |
+| `tools/make-reel.py` | the scroll-scrubbed recording: mp4 from the emulator to webp frames in `public/reel`. Re-run when the app screen changes, and set `COUNT` in `site.js` |
+| `tools/publish.ps1` | render, commit, push; GitHub Pages deploys |
 | `public/` | exactly what GitLab Pages serves. Generated, and committed |
 
 The page loads nothing from anywhere else: the two fonts are the app's own

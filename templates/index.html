@@ -106,6 +106,30 @@
     </div>
   </section>
 
+  <!-- The app itself, moving. The frames are a real recording; the scroll is
+       the play head. -->
+  <section class="reel" id="reel" aria-labelledby="reel-title">
+    <div class="reel-sticky">
+      <div class="wrap reel-inner">
+        <div class="reel-copy">
+          <p class="eyebrow">בוקר אחד</p>
+          <h2 id="reel-title">ככה זה עובד</h2>
+          <ol class="reel-steps">
+            <li data-at="0"><b>התזכורת מגיעה.</b> המסך מראה את הזמנים ואת מה שנשאר מהזמן.</li>
+            <li data-at="0.42"><b>לוחצים «הנחתי».</b> שאלה אחת, כדי שלחיצה בטעות לא תסמן יום.</li>
+            <li data-at="0.72"><b>וזהו.</b> היום מסומן, הרצף ממשיך, והמסך משתחרר.</li>
+          </ol>
+          <p class="reel-hint">גלול כדי לראות</p>
+        </div>
+        <div class="reel-phone">
+          <img class="reel-poster" src="/reel/00.webp" width="380" height="802"
+               alt="מסך הבוקר של הנחתי: השעה, הזמנים שנותרו וכפתור «הנחתי»">
+          <canvas class="reel-canvas" width="380" height="802" aria-hidden="true"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="wrap">
     <p class="eyebrow reveal">מה חדש בגרסה {{VERSION}}</p>
     <p class="lead reveal">{{NOTES}}</p>
@@ -209,6 +233,9 @@
         כך שגם אם תרצה, אין לה דרך לשלוח משהו החוצה. הגרסה שמורידים כאן ניגשת לרשת רק כדי לבדוק אם יצאה
         גרסה חדשה ולהוריד אותה, ואפשר לכבות גם את זה.
       </p>
+      <p class="after">
+        הזמנים מחושבים במכשיר לפי המקום שבחרת. האפליקציה אינה תחליף לפסיקה הלכתית.
+      </p>
     </div>
   </section>
 
@@ -235,13 +262,17 @@
 
 <footer>
   <div class="wrap">
-    <div class="links">
+    <p class="colophon">
       <a href="/privacy/">מדיניות פרטיות</a>
+      <span>·</span>
       <a href="/{{APK}}">הורדת הגרסה האחרונה</a>
+      <span>·</span>
       <a href="/latest.json">קובץ הגרסאות</a>
-    </div>
-    <p>הנחתי · גרסה {{VERSION}} · נבנתה בישראל על ידי Y.a.M</p>
-    <p>הזמנים מחושבים במכשיר. האפליקציה אינה תחליף לפסיקה הלכתית.</p>
+      <span>·</span>
+      <b>הנחתי {{VERSION}}</b>
+      <span>·</span>
+      נבנתה בישראל על ידי Y.a.M
+    </p>
   </div>
 </footer>
 

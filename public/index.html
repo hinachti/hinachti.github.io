@@ -26,7 +26,7 @@
 <link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/img/icon-180.png">
 <link rel="preload" href="/fonts/heebo.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/site.css?v=202609251421">
+<link rel="stylesheet" href="/site.css?v=202609251436">
 <script>document.documentElement.className += ' js';</script>
 
 <script type="application/ld+json">
@@ -191,6 +191,30 @@
     </div>
   </section>
 
+  <!-- The app itself, moving. The frames are a real recording; the scroll is
+       the play head. -->
+  <section class="reel" id="reel" aria-labelledby="reel-title">
+    <div class="reel-sticky">
+      <div class="wrap reel-inner">
+        <div class="reel-copy">
+          <p class="eyebrow">בוקר אחד</p>
+          <h2 id="reel-title">ככה זה עובד</h2>
+          <ol class="reel-steps">
+            <li data-at="0"><b>התזכורת מגיעה.</b> המסך מראה את הזמנים ואת מה שנשאר מהזמן.</li>
+            <li data-at="0.42"><b>לוחצים «הנחתי».</b> שאלה אחת, כדי שלחיצה בטעות לא תסמן יום.</li>
+            <li data-at="0.72"><b>וזהו.</b> היום מסומן, הרצף ממשיך, והמסך משתחרר.</li>
+          </ol>
+          <p class="reel-hint">גלול כדי לראות</p>
+        </div>
+        <div class="reel-phone">
+          <img class="reel-poster" src="/reel/00.webp" width="380" height="802"
+               alt="מסך הבוקר של הנחתי: השעה, הזמנים שנותרו וכפתור «הנחתי»">
+          <canvas class="reel-canvas" width="380" height="802" aria-hidden="true"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="wrap">
     <p class="eyebrow reveal">מה חדש בגרסה 1.7.9</p>
     <p class="lead reveal">גיבוי לתיקייה שהפסיק לעבוד אחרי התקנה מחדש מוצג עכשיו בבירור, עם כפתור לאשר את התיקייה שוב. המסך מותאם לאנדרואיד 15 ו-16, כולל טלפונים עם חור למצלמה. ובלוח השנה, יום שסימנת שלא הנחת מופיע כ״לא הונח״.</p>
@@ -341,6 +365,9 @@
         כך שגם אם תרצה, אין לה דרך לשלוח משהו החוצה. הגרסה שמורידים כאן ניגשת לרשת רק כדי לבדוק אם יצאה
         גרסה חדשה ולהוריד אותה, ואפשר לכבות גם את זה.
       </p>
+      <p class="after">
+        הזמנים מחושבים במכשיר לפי המקום שבחרת. האפליקציה אינה תחליף לפסיקה הלכתית.
+      </p>
     </div>
   </section>
 
@@ -363,7 +390,7 @@
         לפני שמותר לפרסם אותה לכולם. זה לוקח שתי דקות, וזה הדבר היחיד שמפריד בין האפליקציה
         לבין החנות.
       </p>
-      <p style="color: var(--faint); font-size: 0.92rem; margin-top: 18px">
+      <p class="testers-note">
         קישור ההצטרפות ייפתח כאן ברגע שהבדיקה הסגורה תתחיל. בינתיים אפשר פשוט להוריד
         את האפליקציה מהכפתור שלמעלה, וזה עוזר לא פחות.
       </p>
@@ -420,13 +447,17 @@
 
 <footer>
   <div class="wrap">
-    <div class="links">
+    <p class="colophon">
       <a href="/privacy/">מדיניות פרטיות</a>
+      <span>·</span>
       <a href="/hinachti-1.7.9.apk">הורדת הגרסה האחרונה</a>
+      <span>·</span>
       <a href="/latest.json">קובץ הגרסאות</a>
-    </div>
-    <p>הנחתי · גרסה 1.7.9 · נבנתה בישראל על ידי Y.a.M</p>
-    <p>הזמנים מחושבים במכשיר. האפליקציה אינה תחליף לפסיקה הלכתית.</p>
+      <span>·</span>
+      <b>הנחתי 1.7.9</b>
+      <span>·</span>
+      נבנתה בישראל על ידי Y.a.M
+    </p>
   </div>
 </footer>
 
@@ -434,6 +465,6 @@
   <a class="btn" href="/hinachti-1.7.9.apk">הורדה לאנדרואיד <small><bdi dir="ltr">1.8 MB</bdi></small></a>
 </div>
 
-<script src="/site.js?v=202609251421" defer></script>
+<script src="/site.js?v=202609251436" defer></script>
 </body>
 </html>

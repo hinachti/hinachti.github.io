@@ -521,8 +521,23 @@ footer {
   color: var(--faint);
   font-size: 0.9rem;
 }
-footer .links { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-bottom: 16px; }
 footer a { color: var(--dim); }
+
+/* Everything the foot of the page has to say, on one line: three links, the
+   version and the credit. It wraps only when a phone leaves it no choice. */
+.colophon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 12px;
+  margin: 0;
+  text-align: center;
+}
+.colophon span { color: var(--line); }
+.colophon b { color: var(--dim); font-weight: 600; }
+
+.testers-note { color: var(--faint); font-size: 0.92rem; margin-top: 18px; }
 
 /* ------------------------------------------------- sticky download bar */
 
@@ -599,6 +614,92 @@ footer a { color: var(--dim); }
     translateX(calc(var(--scroll, 0) * -300px))
     translateY(calc(var(--scroll, 0) * 140px - var(--arch, 0) * 110px));
   will-change: transform;
+}
+
+/* ------------------------------------------------- the reel
+ *
+ * A real recording of the app, thirty-four frames, with the scroll as the play
+ * head: the section is three screens tall and the phone stays put while you
+ * pass through it. Frames rather than a video file because a video that is
+ * scrubbed rather than played stutters on phones, and because 260KB of stills
+ * beats a megabyte of mp4 that iOS may refuse to seek.
+ */
+
+.reel { padding: 0; height: 320vh; position: relative; }
+.reel-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.reel-inner {
+  display: grid;
+  gap: 34px;
+  align-items: center;
+  justify-items: center;
+}
+.reel-copy { max-width: 46ch; }
+.reel-copy h2 { margin-bottom: 18px; }
+
+.reel-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+.reel-steps li {
+  color: var(--faint);
+  padding-inline-start: 16px;
+  border-inline-start: 2px solid var(--line-soft);
+  transition: color 0.35s ease, border-color 0.35s ease, opacity 0.35s ease;
+  opacity: 0.55;
+  font-size: 0.98rem;
+}
+.reel-steps li b { color: var(--dim); font-weight: 600; transition: color 0.35s ease; }
+.reel-steps li.on { color: var(--dim); opacity: 1; border-inline-start-color: var(--dawn); }
+.reel-steps li.on b { color: var(--text); }
+
+.reel-hint { color: var(--faint); font-size: 0.85rem; margin: 22px 0 0; }
+.js .reel-hint::after {
+  content: ' ↓';
+  display: inline-block;
+  animation: hint 2.2s ease-in-out infinite;
+}
+@keyframes hint {
+  0%, 70%, 100% { transform: none; opacity: 0.6; }
+  85% { transform: translateY(4px); opacity: 1; }
+}
+
+.reel-phone {
+  position: relative;
+  width: min(300px, 62vw);
+  border-radius: 26px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 0 0 90px rgba(224, 169, 74, 0.10);
+  overflow: hidden;
+}
+.reel-phone img,
+.reel-phone canvas { width: 100%; height: auto; display: block; }
+.reel-phone canvas { position: absolute; inset: 0; }
+/* Without the script the still image is the whole story, so it stays. */
+.reel-phone canvas { opacity: 0; }
+.js .reel-phone canvas { opacity: 1; }
+
+@media (min-width: 900px) {
+  .reel-inner { grid-template-columns: 1fr auto; gap: 60px; justify-items: start; }
+  .reel-phone { width: 320px; }
+}
+
+@media (max-width: 899px) {
+  .reel { height: 300vh; }
+  .reel-inner { grid-template-rows: auto auto; }
+  .reel-copy { text-align: center; }
+  .reel-steps { text-align: start; }
+  .reel-phone { width: min(230px, 54vw); }
 }
 
 /* --------------------------------------------------------- stats */

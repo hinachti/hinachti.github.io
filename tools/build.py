@@ -192,14 +192,14 @@ def testers_html() -> str:
             f'        <a class="btn" href="{html.escape(TESTER_GROUP_URL, quote=True)}">1. הצטרפות לקבוצת הבודקים</a>\n'
             f'        <a class="btn-ghost" href="{html.escape(TESTER_OPTIN_URL, quote=True)}">2. אישור ההשתתפות בבדיקה</a>\n'
             f'      </div>\n'
-            f'      <p style="color: var(--faint); font-size: 0.92rem; margin-top: 18px">\n'
+            f'      <p class="testers-note">\n'
             f'        אחרי שני הצעדים האלה מתקינים את האפליקציה מהחנות, ומשאירים אותה מותקנת ארבעה עשר יום.\n'
             f'        מספיק לפתוח אותה מדי פעם. אפשר לפרוש בכל רגע.\n'
             f'      </p>'
         )
     else:
         buttons = (
-            '      <p style="color: var(--faint); font-size: 0.92rem; margin-top: 18px">\n'
+            '      <p class="testers-note">\n'
             '        קישור ההצטרפות ייפתח כאן ברגע שהבדיקה הסגורה תתחיל. בינתיים אפשר פשוט להוריד\n'
             '        את האפליקציה מהכפתור שלמעלה, וזה עוזר לא פחות.\n'
             '      </p>'
