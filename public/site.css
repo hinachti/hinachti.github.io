@@ -673,17 +673,54 @@ footer a { color: var(--dim); }
   85% { transform: translateY(4px); opacity: 1; }
 }
 
+/* The phone sits in its own dawn. The halo is a separate layer behind it so it
+   can be large and soft without being clipped by the screen's corners, and it
+   follows the story: it warms as the reel plays (--reel) and takes a touch of
+   the app's "laid" green once the day is marked (--reel-done). */
 .reel-phone {
   position: relative;
   width: min(300px, 62vw);
   border-radius: 26px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(224, 169, 74, 0.22);
   background: var(--surface);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 0 0 90px rgba(224, 169, 74, 0.10);
-  overflow: hidden;
+  isolation: isolate;
+  box-shadow:
+    0 40px 90px rgba(0, 0, 0, 0.65),
+    0 0 50px rgba(224, 169, 74, 0.16),
+    0 0 130px rgba(224, 169, 74, 0.10);
 }
 .reel-phone img,
-.reel-phone canvas { width: 100%; height: auto; display: block; }
+.reel-phone canvas { width: 100%; height: auto; display: block; border-radius: 25px; }
+
+.reel-phone::before {
+  content: '';
+  position: absolute;
+  inset: -20% -34%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(46% 40% at 50% 38%, rgba(243, 207, 133, calc(0.20 + var(--reel, 0) * 0.20)), transparent 70%),
+    radial-gradient(58% 52% at 50% 58%, rgba(224, 169, 74, 0.13), transparent 72%),
+    radial-gradient(38% 30% at 50% 78%, rgba(132, 165, 92, calc(var(--reel-done, 0) * 0.28)), transparent 70%);
+  filter: blur(20px);
+  animation: halo 6.5s ease-in-out infinite;
+}
+@keyframes halo {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+/* A rim of light along the top edge, the way a screen catches a window. */
+.reel-phone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  pointer-events: none;
+  box-shadow:
+    inset 0 1px 0 rgba(243, 207, 133, 0.38),
+    inset 0 0 0 1px rgba(224, 169, 74, 0.08);
+}
 .reel-phone canvas { position: absolute; inset: 0; }
 /* Without the script the still image is the whole story, so it stays. */
 .reel-phone canvas { opacity: 0; }

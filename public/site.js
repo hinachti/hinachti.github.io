@@ -209,6 +209,10 @@
         // are spread over the first 88% and the end simply holds.
         var index = Math.round(Math.min(1, p / 0.88) * (COUNT - 1));
         draw(index);
+        // The halo behind the phone follows the story: warmer as the morning
+        // plays out, with a touch of green once the day is marked.
+        reel.style.setProperty('--reel', p.toFixed(3));
+        reel.style.setProperty('--reel-done', Math.min(1, Math.max(0, (p - 0.7) / 0.2)).toFixed(3));
         for (var s = 0; s < steps.length; s++) {
           var at = parseFloat(steps[s].getAttribute('data-at'));
           var nextAt = s + 1 < steps.length ? parseFloat(steps[s + 1].getAttribute('data-at')) : 2;
