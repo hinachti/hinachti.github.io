@@ -52,6 +52,19 @@
 <script type="application/ld+json">
 {{FAQ_JSONLD}}
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "הנחתי · תזכורת יומית להנחת תפילין",
+  "description": "ארבעים שניות על הנחתי: תזכורת אחת בבוקר, דיווח בלחיצה, זמני היום, סדר ההנחה, פרשת השבוע ותהילים. חינם, בלי פרסומות ובלי מעקב.",
+  "thumbnailUrl": ["{{SITE}}/video/promo-16x9.jpg"],
+  "uploadDate": "2026-09-28T19:00:00+03:00",
+  "duration": "PT41S",
+  "contentUrl": "{{SITE}}/video/promo-16x9.mp4",
+  "inLanguage": "he"
+}
+</script>
 </head>
 <body>
 <a class="skip" href="#main">דלג לתוכן</a>
@@ -84,7 +97,15 @@
     </div>
 
     <div class="cta">
-      <a class="btn" href="/{{APK}}" id="download">הורדה לאנדרואיד <small><bdi dir="ltr">{{SIZE_MB}} MB</bdi></small></a>
+      <div class="cta-row">
+        <a class="btn" href="/{{APK}}" id="download">הורדה לאנדרואיד <small><bdi dir="ltr">{{SIZE_MB}} MB</bdi></small></a>
+        <!-- Without script this is simply a link to the file; with it, the film
+             opens over the page and nothing is fetched until it is asked for. -->
+        <a class="btn-ghost watch" href="/video/promo-16x9.mp4" data-film>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+          צפו בסרטון <small>41 שניות</small>
+        </a>
+      </div>
       <p class="req">
         לאנדרואיד 8 ומעלה. האפליקציה עדיין לא בחנות של גוגל, ולכן מתקינים אותה מהקובץ הזה.
         אנדרואיד יציג פעם אחת אזהרה על התקנה ממקור שאינו החנות, וזו האזהרה הרגילה על כל קובץ התקנה.
@@ -287,6 +308,15 @@
 <div class="bar" id="bar">
   <a class="btn" href="/{{APK}}">הורדה לאנדרואיד <small><bdi dir="ltr">{{SIZE_MB}} MB</bdi></small></a>
 </div>
+
+<dialog class="film" id="film" aria-label="הסרטון של הנחתי">
+  <button class="film-close" type="button" aria-label="סגירת הסרטון">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <video controls playsinline preload="none"
+         data-wide="/video/promo-16x9.mp4" data-wide-poster="/video/promo-16x9.jpg"
+         data-tall="/video/promo-9x16.mp4" data-tall-poster="/video/promo-9x16.jpg"></video>
+</dialog>
 
 <script src="/site.js?v={{STAMP}}" defer></script>
 </body>

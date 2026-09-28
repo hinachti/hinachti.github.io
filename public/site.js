@@ -260,6 +260,45 @@
     }
   }
 
+  // --- the film ------------------------------------------------------------
+  //
+  // Opens over the page from the button in the header. Nothing is fetched
+  // until then (preload="none"), so the page costs no more to load than it
+  // did. A phone held upright gets the upright cut; everything else the wide one.
+  var film = document.getElementById('film');
+  var openers = document.querySelectorAll('[data-film]');
+  if (film && typeof film.showModal === 'function' && openers.length) {
+    var video = film.querySelector('video');
+    var opener = null;
+
+    var openFilm = function (event) {
+      event.preventDefault();
+      opener = this;
+      var tall = window.matchMedia('(max-aspect-ratio: 4/5)').matches;
+      var src = video.getAttribute(tall ? 'data-tall' : 'data-wide');
+      if (video.getAttribute('src') !== src) {
+        video.setAttribute('poster', video.getAttribute(tall ? 'data-tall-poster' : 'data-wide-poster'));
+        video.setAttribute('src', src);
+      }
+      film.classList.toggle('tall', tall);
+      film.showModal();
+      // the click is the permission to play with sound
+      var playing = video.play();
+      if (playing && playing.catch) playing.catch(function () {});
+    };
+    for (var f = 0; f < openers.length; f++) openers[f].addEventListener('click', openFilm);
+
+    film.querySelector('.film-close').addEventListener('click', function () { film.close(); });
+    // a click on the dim area around the film closes it
+    film.addEventListener('click', function (event) {
+      if (event.target === film) film.close();
+    });
+    film.addEventListener('close', function () {
+      video.pause();
+      if (opener) opener.focus();
+    });
+  }
+
   // --- light follows the pointer across a card -----------------------------
   //
   // Pointer only: a finger has no hover, and a card that lights up under a

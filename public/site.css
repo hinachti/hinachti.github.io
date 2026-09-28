@@ -248,6 +248,66 @@ h1 {
 }
 .btn-ghost:hover { text-decoration: none; border-color: var(--dawn-deep); background: rgba(224, 169, 74, 0.06); }
 
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+.watch { padding: 15px 26px; font-size: 1.02rem; }
+.watch svg { width: 18px; height: 18px; fill: var(--dawn); flex: none; }
+.watch small { color: var(--faint); font-size: 0.82rem; }
+
+/* The film opens over the page; the page underneath does not move. */
+.film {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+}
+.film::backdrop {
+  background: rgba(8, 7, 5, 0.84);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.film[open] { animation: film-in 0.36s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes film-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+}
+.film video {
+  display: block;
+  width: min(92vw, 1120px, calc(78svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  background: #000;
+  outline: 1px solid var(--line);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6), 0 0 80px rgba(224, 169, 74, 0.16);
+}
+.film.tall video {
+  width: min(92vw, calc(80svh * 9 / 16));
+  aspect-ratio: 9 / 16;
+}
+.film-close {
+  position: absolute;
+  top: -54px;
+  inset-inline-end: 0;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(23, 20, 15, 0.9);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.18s ease;
+}
+.film-close:hover, .film-close:focus-visible { border-color: var(--dawn-deep); }
+.film-close svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; fill: none; }
+
 .req {
   margin: 18px auto 0;
   max-width: 46ch;
@@ -907,6 +967,7 @@ summary:hover { color: var(--dawn); }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .film[open] { animation: none; }
   html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
