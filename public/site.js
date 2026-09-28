@@ -323,6 +323,10 @@
       event.preventDefault();
       opener = this;
       tall = window.matchMedia('(max-aspect-ratio: 4/5)').matches;
+      // preload="none" keeps the page light until now; once the reader has
+      // asked for the film, a change of quality must load without waiting
+      // for another press of play.
+      video.preload = 'auto';
       var src = srcFor();
       if (video.getAttribute('src') !== src) {
         pending = null;
