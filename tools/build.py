@@ -296,11 +296,14 @@ def main() -> None:
     (PUBLIC / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8"
     )
+    # The day the pages were built, not the app's release date: the site changes
+    # between releases, and a stale date tells Google there is nothing new to read.
+    built = datetime.now(timezone.utc).date().isoformat()
     (PUBLIC / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f"  <url><loc>{SITE_URL}/</loc><lastmod>{rel['date_iso']}</lastmod><priority>1.0</priority></url>\n"
-        f"  <url><loc>{SITE_URL}/privacy/</loc><lastmod>{rel['date_iso']}</lastmod><priority>0.3</priority></url>\n"
+        f"  <url><loc>{SITE_URL}/</loc><lastmod>{built}</lastmod><priority>1.0</priority></url>\n"
+        f"  <url><loc>{SITE_URL}/privacy/</loc><lastmod>{built}</lastmod><priority>0.3</priority></url>\n"
         "</urlset>\n",
         encoding="utf-8",
     )
