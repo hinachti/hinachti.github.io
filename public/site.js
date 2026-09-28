@@ -289,6 +289,22 @@
       }
     };
 
+    // Where to pick up after a change of quality. Kept across changes, so two
+    // quick clicks before the first file has loaded do not lose the place.
+    var pending = null;
+    var resume = function () {
+      if (!pending) return;
+      var at = pending.at;
+      var play = pending.play;
+      pending = null;
+      if (at) video.currentTime = at;
+      if (play) {
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
+      }
+    };
+    video.addEventListener('loadedmetadata', resume);
+
     for (var qb = 0; qb < qButtons.length; qb++) {
       qButtons[qb].addEventListener('click', function () {
         var q = this.getAttribute('data-q');
@@ -296,18 +312,10 @@
         quality = q;
         try { localStorage.setItem('hinachti-film-q', q); } catch (e) {}
         markQuality();
-        // carry on from the same moment in the new file
-        var at = video.currentTime;
-        var wasPlaying = !video.paused;
+        if (!pending) {
+          pending = { at: video.readyState > 0 ? video.currentTime : 0, play: !video.paused };
+        }
         video.setAttribute('src', srcFor());
-        video.addEventListener('loadedmetadata', function resume() {
-          video.removeEventListener('loadedmetadata', resume);
-          video.currentTime = at;
-          if (wasPlaying) {
-            var p = video.play();
-            if (p && p.catch) p.catch(function () {});
-          }
-        });
       });
     }
 
@@ -317,6 +325,7 @@
       tall = window.matchMedia('(max-aspect-ratio: 4/5)').matches;
       var src = srcFor();
       if (video.getAttribute('src') !== src) {
+        pending = null;
         video.setAttribute('poster', video.getAttribute(tall ? 'data-tall-poster' : 'data-wide-poster'));
         video.setAttribute('src', src);
       }
