@@ -257,7 +257,6 @@ h1 {
 }
 .watch { padding: 15px 26px; font-size: 1.02rem; }
 .watch svg { width: 18px; height: 18px; fill: var(--dawn); flex: none; }
-.watch small { color: var(--faint); font-size: 0.82rem; }
 
 /* The film opens over the page; the page underneath does not move. */
 .film {
