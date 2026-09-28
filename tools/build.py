@@ -35,9 +35,8 @@ RELEASES = SITE.parent / "hinachti-releases"
 CONTACT_EMAIL = ""
 
 CONTACT_FALLBACK = (
-    "אין כאן כתובת אישית. אם משהו באפליקציה לא בסדר, או שיש לך שאלה על "
-    "הפרטיות, אפשר לפנות דרך האדם שממנו קיבלת את הקישור, וברגע שהאפליקציה "
-    "תהיה בחנות תופיע גם כתובת ליצירת קשר בדף שלה ב-Google Play."
+    'כל שאלה, גם על הפרטיות, אפשר לשלוח דרך <a href="/#contact">טופס יצירת הקשר</a> '
+    "באתר, או מתוך האפליקציה: תפריט ← כתבו לנו."
 )
 
 # Google Play closed testing. Fill both in once the closed track is open, and

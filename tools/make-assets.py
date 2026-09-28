@@ -18,7 +18,7 @@ import sys
 
 from PIL import Image
 
-APP = Path(r"C:\Users\yamki\hinachti")
+APP = Path(__file__).resolve().parent.parent.parent / "hinachti"   # the app repo, next to this one
 SITE = Path(__file__).resolve().parent.parent
 PUBLIC = SITE / "public"
 

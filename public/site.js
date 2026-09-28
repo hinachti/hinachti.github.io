@@ -353,6 +353,229 @@
     });
   }
 
+  // --- write to us ---------------------------------------------------------
+  //
+  // The message goes to a small script in the site owner's own Google account,
+  // which checks it, files it where only he can read it, and tells him at
+  // once. Nothing is loaded for this: it is one request, sent when the reader
+  // presses send, carrying only what they typed.
+  //
+  // The app's "כתבו לנו" opens this page with ?from=app&v=<version>&device=<model>,
+  // so a report from the app arrives already saying which phone and version.
+  var CONTACT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwV5B4HwFJturt6FyxYBqQ_VlZdsI1a09GBNv19fAJGBm6dwq-tQAerxuX6LcC-3gDGMw/exec';
+  var POW_BITS = 16;
+  var form = document.getElementById('contact-form');
+  if (form) {
+    var opened = Date.now();
+    var stars = document.getElementById('stars');
+    var starButtons = stars.querySelectorAll('[data-star]');
+    var rating = 0;
+    var body = form.elements.body;
+    var count = document.getElementById('count');
+    var device = document.getElementById('device');
+    var deviceModel = document.getElementById('device-model');
+    var confirmBox = document.getElementById('confirm');
+    var confirmState = confirmBox.querySelector('.confirm-state');
+    var sendButton = document.getElementById('send');
+    var sendError = document.getElementById('send-error');
+    var params = new URLSearchParams(location.search);
+    var source = params.get('from') === 'app' ? 'app' : 'web';
+
+    var paintStars = function (n) {
+      for (var s = 0; s < starButtons.length; s++) {
+        starButtons[s].classList.toggle('on', s < n);
+        starButtons[s].setAttribute('aria-checked', String(s + 1 === rating));
+      }
+    };
+    for (var sb = 0; sb < starButtons.length; sb++) {
+      starButtons[sb].addEventListener('click', function () {
+        rating = +this.getAttribute('data-star');
+        paintStars(rating);
+      });
+      starButtons[sb].addEventListener('mouseenter', function () { paintStars(+this.getAttribute('data-star')); });
+      starButtons[sb].addEventListener('mouseleave', function () { paintStars(rating); });
+    }
+
+    // stars only for a review; the version for a fault or a review; the phone for a fault
+    var showFor = function (kind) {
+      stars.hidden = kind !== 'review';
+      device.hidden = kind !== 'bug' && kind !== 'review';
+      deviceModel.hidden = kind !== 'bug';
+    };
+    var kinds = form.querySelectorAll('input[name="kind"]');
+    for (var kd = 0; kd < kinds.length; kd++) {
+      kinds[kd].addEventListener('change', function () { showFor(this.value); });
+    }
+
+    // what the app passed along, or what the browser itself can tell
+    var fromApp = function () {
+      if (params.get('v')) form.elements.appVersion.value = params.get('v').slice(0, 20);
+      if (params.get('device')) form.elements.device.value = params.get('device').slice(0, 80);
+      var wanted = form.querySelector('input[name="kind"][value="' + params.get('kind') + '"]');
+      if (wanted) { wanted.checked = true; showFor(wanted.value); }
+    };
+    fromApp();
+    if (!form.elements.device.value && navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+      navigator.userAgentData.getHighEntropyValues(['model']).then(function (ua) {
+        if (ua.model && !form.elements.device.value) form.elements.device.value = ua.model;
+      }).catch(function () {});
+    }
+
+    body.addEventListener('input', function () { count.textContent = body.value.length; });
+
+    // Proof of work: find a number whose hash with a fresh salt starts with
+    // POW_BITS zero bits. About a second's worth of hashing, once, in the
+    // background; the server checks it with a single hash.
+    var pow = null;
+    var solving = null;
+    var leadingZeroBits = function (bytes) {
+      var n = 0;
+      for (var i = 0; i < bytes.length; i++) {
+        if (bytes[i] === 0) { n += 8; continue; }
+        for (var b = 7; b >= 0 && !(bytes[i] >> b & 1); b--) n++;
+        break;
+      }
+      return n;
+    };
+    var solve = function () {
+      var salt = opened + '.' + Math.random().toString(16).slice(2, 10);
+      var enc = new TextEncoder();
+      var nonce = 0;
+      var batch = function () {
+        var tries = [];
+        for (var k = 0; k < 64; k++) {
+          (function (n) {
+            tries.push(crypto.subtle.digest('SHA-256', enc.encode(salt + ':' + n)).then(function (h) {
+              return leadingZeroBits(new Uint8Array(h)) >= POW_BITS ? n : -1;
+            }));
+          })(nonce++);
+        }
+        return Promise.all(tries).then(function (found) {
+          for (var f = 0; f < found.length; f++) if (found[f] >= 0) return { salt: salt, nonce: found[f] };
+          return batch();
+        });
+      };
+      return batch();
+    };
+    var startSolving = function () {
+      confirmBox.classList.remove('bad', 'ok');
+      confirmState.textContent = 'בודק…';
+      var mine = solving = solve().then(function (result) {
+        if (solving !== mine) return result;
+        pow = result;
+        confirmBox.classList.add('ok');
+        confirmState.textContent = '✓ אומת';
+        return result;
+      });
+      return mine;
+    };
+    form.elements.confirm.addEventListener('change', function () {
+      pow = null;
+      if (this.checked) startSolving();
+      else { solving = null; confirmBox.classList.remove('ok'); confirmState.textContent = ''; }
+    });
+
+    var mark = function (name, bad) {
+      form.elements[name].closest('.field').classList.toggle('bad', bad);
+      return bad;
+    };
+    ['subject', 'body', 'email'].forEach(function (name) {
+      form.elements[name].addEventListener('input', function () { mark(name, false); });
+    });
+
+    var sending = false;
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      if (sending) return;
+      sendError.hidden = true;
+      var email = form.elements.email.value.trim();
+      var bad = false;
+      bad = mark('subject', form.elements.subject.value.trim().length < 2) || bad;
+      bad = mark('body', body.value.trim().length < 5) || bad;
+      bad = mark('email', email !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) || bad;
+      var unconfirmed = !form.elements.confirm.checked;
+      confirmBox.classList.toggle('bad', unconfirmed);
+      if (bad || unconfirmed) {
+        var first = form.querySelector('.field.bad input, .field.bad textarea') || form.elements.confirm;
+        first.focus();
+        return;
+      }
+      if (form.elements.website.value) {             // the trap was filled: a bot. Look sent, send nothing.
+        form.classList.add('done');
+        document.getElementById('sent').hidden = false;
+        return;
+      }
+
+      sending = true;
+      sendButton.disabled = true;
+      sendButton.textContent = 'שולח…';
+      var kind = form.querySelector('input[name="kind"]:checked').value;
+
+      Promise.resolve(pow || solving || startSolving()).then(function (proof) {
+        var message = {
+          kind: kind,
+          stars: kind === 'review' ? rating : 0,
+          name: form.elements.name.value.trim(),
+          email: email,
+          subject: form.elements.subject.value.trim(),
+          body: body.value.trim(),
+          device: kind === 'bug' ? form.elements.device.value.trim() : '',
+          appVersion: kind === 'bug' || kind === 'review' ? form.elements.appVersion.value.trim() : '',
+          source: source,
+          opened: opened,
+          salt: proof.salt,
+          nonce: proof.nonce,
+          website: ''
+        };
+        if (!CONTACT_ENDPOINT) {
+          // Only a local preview may run without the backend; anywhere else,
+          // pretending it was sent would lose the message.
+          if (location.hostname !== 'localhost') throw new Error('no endpoint');
+          return new Promise(function (ok) { setTimeout(function () { ok({ ok: true }); }, 500); });
+        }
+        var aborter = 'AbortController' in window ? new AbortController() : null;
+        var timer = setTimeout(function () { if (aborter) aborter.abort(); }, 20000);
+        return fetch(CONTACT_ENDPOINT, {
+          method: 'POST',
+          // text/plain keeps this a simple request: no preflight, which Apps Script cannot answer
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(message),
+          signal: aborter ? aborter.signal : undefined
+        }).then(function (response) {
+          clearTimeout(timer);
+          return response.json();
+        });
+      }).then(function (reply) {
+        if (!reply || !reply.ok) throw new Error((reply && reply.error) || 'rejected');
+        form.classList.add('done');
+        document.getElementById('sent').hidden = false;
+      }).catch(function () {
+        sendError.hidden = false;
+      }).then(function () {
+        sending = false;
+        sendButton.disabled = false;
+        sendButton.textContent = 'שליחה';
+      });
+    });
+
+    document.getElementById('again').addEventListener('click', function () {
+      form.reset();
+      rating = 0;
+      paintStars(0);
+      showFor('question');
+      fromApp();
+      count.textContent = '0';
+      opened = Date.now();
+      pow = null;
+      solving = null;
+      confirmBox.classList.remove('ok', 'bad');
+      confirmState.textContent = '';
+      document.getElementById('sent').hidden = true;
+      form.classList.remove('done');
+      form.elements.subject.focus();
+    });
+  }
+
   // --- light follows the pointer across a card -----------------------------
   //
   // Pointer only: a finger has no hover, and a card that lights up under a

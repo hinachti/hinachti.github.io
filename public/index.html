@@ -26,7 +26,7 @@
 <link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/img/icon-180.png">
 <link rel="preload" href="/fonts/heebo.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/site.css?v=202609281713">
+<link rel="stylesheet" href="/site.css?v=202609281945">
 <script>document.documentElement.className += ' js';</script>
 
 <script type="application/ld+json">
@@ -472,6 +472,99 @@
     </div>
   </section>
 
+  <!-- Write to us. The page loads nothing extra for this: the message goes out
+       only when the reader presses send, and only what they typed. The app's
+       "כתבו לנו" opens this same form, so everything lands in one place. -->
+  <section class="wrap" id="contact">
+    <p class="eyebrow reveal">צרו קשר</p>
+    <h2 class="reveal">כתבו לנו</h2>
+    <p class="lead reveal">שאלה, רעיון, תקלה או ביקורת. כל פנייה נקראת, וכשצריך, חוזרים אליכם.</p>
+
+    <form class="contact reveal" id="contact-form" novalidate>
+      <fieldset class="kinds">
+        <legend>על מה?</legend>
+        <label><input type="radio" name="kind" value="question" checked><span>שאלה</span></label>
+        <label><input type="radio" name="kind" value="idea"><span>הצעה</span></label>
+        <label><input type="radio" name="kind" value="bug"><span>תקלה</span></label>
+        <label><input type="radio" name="kind" value="review"><span>ביקורת</span></label>
+      </fieldset>
+
+      <div class="stars" id="stars" role="radiogroup" aria-label="דירוג" hidden>
+        <button type="button" role="radio" aria-checked="false" data-star="1" aria-label="כוכב אחד">★</button>
+        <button type="button" role="radio" aria-checked="false" data-star="2" aria-label="שני כוכבים">★</button>
+        <button type="button" role="radio" aria-checked="false" data-star="3" aria-label="שלושה כוכבים">★</button>
+        <button type="button" role="radio" aria-checked="false" data-star="4" aria-label="ארבעה כוכבים">★</button>
+        <button type="button" role="radio" aria-checked="false" data-star="5" aria-label="חמישה כוכבים">★</button>
+      </div>
+
+      <div class="fields">
+        <label class="field">
+          <span>שם <em>(לא חובה)</em></span>
+          <input name="name" autocomplete="name" maxlength="80">
+        </label>
+        <label class="field">
+          <span>מייל <em>(רק אם תרצו תשובה)</em></span>
+          <input name="email" type="email" autocomplete="email" maxlength="120" dir="ltr">
+          <small class="err" data-for="email">כתובת המייל לא נראית תקינה</small>
+        </label>
+
+        <!-- Which version, for a fault or a review, already filled in with the
+             latest one (the app passes its own); which phone, for a fault only,
+             filled in when the app or Android Chrome can tell. Always free text:
+             there is no list of models to keep up to date. -->
+        <div class="device wide" id="device" hidden>
+          <label class="field" id="device-model">
+            <span>דגם הטלפון <em>(לא חובה)</em></span>
+            <input name="device" maxlength="80" placeholder="למשל Galaxy S23" dir="auto">
+          </label>
+          <label class="field">
+            <span>גרסת האפליקציה <em>(הגרסה האחרונה, אפשר לשנות)</em></span>
+            <input name="appVersion" maxlength="20" value="1.7.9" dir="ltr">
+          </label>
+        </div>
+
+        <label class="field wide">
+          <span>כותרת</span>
+          <input name="subject" maxlength="120" required>
+          <small class="err" data-for="subject">כמה מילים על מה מדובר</small>
+        </label>
+        <label class="field wide">
+          <span>ההודעה</span>
+          <textarea name="body" rows="6" maxlength="2000" required></textarea>
+          <small class="count"><b id="count">0</b> / 2000</small>
+          <small class="err" data-for="body">מה תרצו לספר לנו?</small>
+        </label>
+        <!-- a field only a bot fills in -->
+        <label class="trap" aria-hidden="true">אתר<input name="website" tabindex="-1" autocomplete="off"></label>
+      </div>
+
+      <!-- Our own check, not a puzzle: ticking the box makes the browser solve a
+           small sum in the background, which costs a person nothing and a bot
+           sending thousands a great deal. -->
+      <label class="confirm" id="confirm">
+        <input type="checkbox" name="confirm">
+        <span class="box" aria-hidden="true"></span>
+        <span class="confirm-text">אני מאשר/ת את השליחה</span>
+        <span class="confirm-state" aria-live="polite"></span>
+      </label>
+      <small class="err confirm-err" id="confirm-err">צריך לסמן את התיבה כדי לשלוח</small>
+
+      <div class="send">
+        <button class="btn" type="submit" id="send">שליחה</button>
+        <p class="fine">השם והמייל משמשים רק כדי לחזור אליכם, ולא לשום דבר אחר.
+          <a href="/privacy/">מדיניות הפרטיות</a></p>
+      </div>
+      <p class="send-error" id="send-error" role="alert" hidden>לא הצלחנו לשלוח כרגע. אפשר לנסות שוב בעוד רגע.</p>
+
+      <div class="sent" id="sent" hidden>
+        <svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg>
+        <h3>תודה, קיבלנו.</h3>
+        <p>הפנייה הגיעה אלינו. אם השארתם מייל, נחזור אליכם משם.</p>
+        <button class="btn-ghost" type="button" id="again">פנייה נוספת</button>
+      </div>
+    </form>
+  </section>
+
   <!-- Whoever read down to here is the one most ready to install, so the page
        ends with the same button it opened with rather than a footer link. -->
   <section class="wrap closing">
@@ -491,10 +584,13 @@
     <p class="colophon">
       <a href="/privacy/">מדיניות פרטיות</a>
       <span>·</span>
+      <a href="#contact">צרו קשר</a>
+      <span>·</span>
       <b>הנחתי 1.7.9</b>
       <span>·</span>
       נוצר על ידי ים טליאס
     </p>
+    <p class="rights">© <bdi>2026</bdi> הנחתי. כל הזכויות שמורות.</p>
   </div>
 </footer>
 
@@ -517,6 +613,6 @@
          data-tall="/video/promo-9x16-{q}.mp4" data-tall-poster="/video/promo-9x16.jpg"></video>
 </dialog>
 
-<script src="/site.js?v=202609281713" defer></script>
+<script src="/site.js?v=202609281945" defer></script>
 </body>
 </html>
