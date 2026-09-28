@@ -306,6 +306,29 @@ h1 {
   transition: border-color 0.18s ease;
 }
 .film-close:hover, .film-close:focus-visible { border-color: var(--dawn-deep); }
+.film-quality {
+  position: absolute;
+  top: -54px;
+  inset-inline-start: 0;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(23, 20, 15, 0.9);
+}
+.film-quality button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: transparent;
+  color: var(--dim);
+  font: 500 0.86rem var(--sans);
+  cursor: pointer;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+.film-quality button:hover { color: var(--text); }
+.film-quality button[aria-pressed="true"] { background: rgba(224, 169, 74, 0.16); color: var(--dawn); }
 .film-close svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; fill: none; }
 
 .req {

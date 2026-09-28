@@ -269,17 +269,58 @@
   var openers = document.querySelectorAll('[data-film]');
   if (film && typeof film.showModal === 'function' && openers.length) {
     var video = film.querySelector('video');
+    var qButtons = film.querySelectorAll('[data-q]');
     var opener = null;
+    var tall = false;
+
+    // 1080p unless the reader asked the browser to save data or the line is
+    // slow; a choice they make here wins, and is kept on this device only.
+    var saved = null;
+    try { saved = localStorage.getItem('hinachti-film-q'); } catch (e) {}
+    var net = navigator.connection || {};
+    var quality = saved || ((net.saveData || /(^|-)2g|3g/.test(net.effectiveType || '')) ? '720' : '1080');
+
+    var srcFor = function () {
+      return video.getAttribute(tall ? 'data-tall' : 'data-wide').replace('{q}', quality);
+    };
+    var markQuality = function () {
+      for (var b = 0; b < qButtons.length; b++) {
+        qButtons[b].setAttribute('aria-pressed', qButtons[b].getAttribute('data-q') === quality ? 'true' : 'false');
+      }
+    };
+
+    for (var qb = 0; qb < qButtons.length; qb++) {
+      qButtons[qb].addEventListener('click', function () {
+        var q = this.getAttribute('data-q');
+        if (q === quality) return;
+        quality = q;
+        try { localStorage.setItem('hinachti-film-q', q); } catch (e) {}
+        markQuality();
+        // carry on from the same moment in the new file
+        var at = video.currentTime;
+        var wasPlaying = !video.paused;
+        video.setAttribute('src', srcFor());
+        video.addEventListener('loadedmetadata', function resume() {
+          video.removeEventListener('loadedmetadata', resume);
+          video.currentTime = at;
+          if (wasPlaying) {
+            var p = video.play();
+            if (p && p.catch) p.catch(function () {});
+          }
+        });
+      });
+    }
 
     var openFilm = function (event) {
       event.preventDefault();
       opener = this;
-      var tall = window.matchMedia('(max-aspect-ratio: 4/5)').matches;
-      var src = video.getAttribute(tall ? 'data-tall' : 'data-wide');
+      tall = window.matchMedia('(max-aspect-ratio: 4/5)').matches;
+      var src = srcFor();
       if (video.getAttribute('src') !== src) {
         video.setAttribute('poster', video.getAttribute(tall ? 'data-tall-poster' : 'data-wide-poster'));
         video.setAttribute('src', src);
       }
+      markQuality();
       film.classList.toggle('tall', tall);
       film.showModal();
       // the click is the permission to play with sound
