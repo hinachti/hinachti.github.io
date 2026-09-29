@@ -1185,3 +1185,85 @@ summary:hover { color: var(--dawn); }
 .prose .page-cta .btn { margin-top: 6px; }
 .prose .page-cta .more { margin: 16px 0 0; }
 .prose .fine { margin-top: 26px; font-size: 0.88rem; color: var(--faint); }
+
+/* --------------------------------------------------------- scrollbar
+ *
+ * The page's own dawn instead of the browser's grey. Chrome, Edge and Safari
+ * take the webkit parts (a rounded, glowing thumb); Firefox only knows two
+ * flat colours, so it gets those and nothing else. Chrome would let the flat
+ * pair win over the webkit parts, which is why Firefox's line is fenced off.
+ */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  border: 3px solid var(--bg);
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--dawn), var(--dawn-deep));
+  min-height: 48px;
+}
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #f3cf85, var(--dawn)); }
+::-webkit-scrollbar-thumb:active { background: #f3cf85; }
+::-webkit-scrollbar-corner { background: var(--bg); }
+@supports not selector(::-webkit-scrollbar) {
+  html { scrollbar-color: var(--dawn-deep) var(--bg); }
+}
+
+/* --------------------------------------------------------- cursor
+ *
+ * A point of light and a ring that trails it, on this site only, and only
+ * with a mouse: a finger has no cursor. The ring opens up over anything that
+ * can be clicked. Typing keeps the real caret, and so does the film, which
+ * sits in the browser's top layer above anything the page can draw.
+ */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  will-change: transform;
+}
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: #f3cf85;
+  /* The thin dark edge keeps the dot visible on the gold buttons. */
+  box-shadow: 0 0 0 1.5px rgba(14, 12, 9, 0.55), 0 0 10px rgba(243, 207, 133, 0.8), 0 0 22px rgba(224, 169, 74, 0.45);
+}
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+  border: 1.5px solid rgba(224, 169, 74, 0.55);
+  transition: opacity 0.25s ease, width 0.25s ease, height 0.25s ease, margin 0.25s ease,
+              background-color 0.25s ease, border-color 0.25s ease;
+}
+.has-cursor.cursor-on .cursor-dot,
+.has-cursor.cursor-on .cursor-ring { opacity: 1; }
+.cursor-ring.over {
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-color: rgba(243, 207, 133, 0.9);
+  background-color: rgba(224, 169, 74, 0.10);
+  box-shadow: 0 0 0 1px rgba(14, 12, 9, 0.35), inset 0 0 0 1px rgba(14, 12, 9, 0.35);
+}
+.cursor-ring.down { width: 26px; height: 26px; margin: -13px 0 0 -13px; background-color: rgba(224, 169, 74, 0.22); }
+
+.has-cursor,
+.has-cursor * { cursor: none !important; }
+.has-cursor input:not([type="radio"]):not([type="checkbox"]):not([type="range"]),
+.has-cursor textarea,
+.has-cursor [contenteditable="true"] { cursor: text !important; }
+.has-cursor:has(dialog[open]),
+.has-cursor:has(dialog[open]) * { cursor: auto !important; }
+.has-cursor:has(dialog[open]) :is(a, button, [data-q]) { cursor: pointer !important; }
+.has-cursor:has(dialog[open]) .cursor-dot,
+.has-cursor:has(dialog[open]) .cursor-ring,
+.has-cursor.cursor-typing .cursor-dot,
+.has-cursor.cursor-typing .cursor-ring { opacity: 0 !important; }

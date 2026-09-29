@@ -590,4 +590,61 @@
       });
     }
   }
+
+  // --- the cursor: a point of light, and a ring that trails it ---------------
+  //
+  // A mouse only (a finger has no cursor), and nothing until the mouse first
+  // moves, so it never sits in a corner. The dot is where the pointer is; the
+  // ring eases after it, and stops asking for frames once it has caught up.
+  // Asked for less motion: the ring keeps up at once instead of trailing.
+  if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    var root = document.documentElement;
+    var dot = document.createElement('div');
+    var ring = document.createElement('div');
+    dot.className = 'cursor-dot';
+    ring.className = 'cursor-ring';
+    dot.setAttribute('aria-hidden', 'true');
+    ring.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    root.classList.add('has-cursor');
+
+    var CLICKABLE = 'a, button, label, summary, select, [role="button"], [data-film], .shots img, input[type="radio"], input[type="checkbox"]';
+    var TYPING = 'input:not([type="radio"]):not([type="checkbox"]):not([type="range"]):not([type="submit"]):not([type="button"]), textarea, [contenteditable="true"]';
+    var mx = 0, my = 0, rx = 0, ry = 0;
+    var chasing = false;
+
+    var chase = function () {
+      var dx = mx - rx, dy = my - ry;
+      if (reduced || (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1)) {
+        rx = mx; ry = my;
+        chasing = false;
+      } else {
+        rx += dx * 0.2; ry += dy * 0.2;
+        requestAnimationFrame(chase);
+      }
+      ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0)';
+    };
+
+    document.addEventListener('mousemove', function (event) {
+      mx = event.clientX; my = event.clientY;
+      dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0)';
+      if (!root.classList.contains('cursor-on')) {
+        rx = mx; ry = my;
+        root.classList.add('cursor-on');
+      }
+      if (!chasing) { chasing = true; requestAnimationFrame(chase); }
+    }, { passive: true });
+
+    document.addEventListener('mouseover', function (event) {
+      var target = event.target && event.target.closest ? event.target : null;
+      ring.classList.toggle('over', !!(target && target.closest(CLICKABLE)));
+      root.classList.toggle('cursor-typing', !!(target && target.closest(TYPING)));
+    });
+    document.addEventListener('mousedown', function () { ring.classList.add('down'); });
+    document.addEventListener('mouseup', function () { ring.classList.remove('down'); });
+    // Off the page (into the browser's own bar, or another window): gone.
+    root.addEventListener('mouseleave', function () { root.classList.remove('cursor-on'); });
+    window.addEventListener('blur', function () { root.classList.remove('cursor-on'); });
+  }
 })();
