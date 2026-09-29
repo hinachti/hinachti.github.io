@@ -1155,3 +1155,33 @@ summary:hover { color: var(--dawn); }
 @media (max-width: 720px) {
   .device { grid-template-columns: 1fr; }
 }
+
+/* The words under the name in the hero: what people search for, set small. */
+.h1-sub {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--sans, inherit);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--dawn, #e0a94a);
+}
+
+/* The article pages: seder and zman. */
+.prose .page-title { font-family: var(--serif); font-size: 2.2rem; margin-bottom: 6px; }
+.prose h3 { margin-top: 26px; margin-bottom: 2px; font-size: 1.1rem; color: var(--dawn, #e0a94a); }
+.prose .note { margin: 2px 0 6px; font-size: 0.9rem; color: var(--faint); }
+.prose .say { margin: 0 0 8px; font-family: var(--serif); font-size: 1.4rem; line-height: 2; color: var(--text); }
+.prose .toc { display: flex; flex-wrap: wrap; gap: 8px 10px; margin: 22px 0 6px; }
+.prose .toc a {
+  padding: 7px 14px; border: 1px solid var(--line, #332c21); border-radius: 999px;
+  text-decoration: none; font-size: 0.95rem;
+}
+.prose .page-cta {
+  margin-top: 48px; padding: 22px; border-radius: 18px;
+  border: 1px solid var(--line, #332c21); background: rgba(240, 233, 219, 0.04);
+}
+.prose .page-cta h2 { margin-top: 0; }
+.prose .page-cta .btn { margin-top: 6px; }
+.prose .page-cta .more { margin: 16px 0 0; }
+.prose .fine { margin-top: 26px; font-size: 0.88rem; color: var(--faint); }

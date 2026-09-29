@@ -293,6 +293,14 @@ def main() -> None:
         encoding="utf-8",
     )
 
+    # The two article pages: what people search for when they search for
+    # tefillin, each ending on the app. Same values as the main page, so the
+    # download button always names the current file.
+    for template, slug in (("seder.html", "seder-hanachat-tefillin"), ("zman.html", "zman-hanachat-tefillin")):
+        folder = PUBLIC / slug
+        folder.mkdir(exist_ok=True)
+        (folder / "index.html").write_text(render(template, values), encoding="utf-8")
+
     (PUBLIC / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8"
     )
@@ -303,6 +311,8 @@ def main() -> None:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         f"  <url><loc>{SITE_URL}/</loc><lastmod>{built}</lastmod><priority>1.0</priority></url>\n"
+        f"  <url><loc>{SITE_URL}/seder-hanachat-tefillin/</loc><lastmod>{built}</lastmod><priority>0.8</priority></url>\n"
+        f"  <url><loc>{SITE_URL}/zman-hanachat-tefillin/</loc><lastmod>{built}</lastmod><priority>0.8</priority></url>\n"
         f"  <url><loc>{SITE_URL}/privacy/</loc><lastmod>{built}</lastmod><priority>0.3</priority></url>\n"
         "</urlset>\n",
         encoding="utf-8",
