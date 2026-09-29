@@ -42,7 +42,11 @@ CONTACT_FALLBACK = (
 # Google Play closed testing. Fill both in once the closed track is open, and
 # the tester section appears on the page by itself; leave them empty and the
 # section explains the situation without dead links.
-TESTER_GROUP_URL = "https://groups.google.com/g/hinachti-testers"
+# The group's "about" page, not its front page. Signed out, the front page
+# says "You don't have permission to access this content", because only the
+# owner can read posts; the about page shows the description and "anyone on
+# the web can join group", which is what a visitor needs to see.
+TESTER_GROUP_URL = "https://groups.google.com/g/hinachti-testers/about"
 TESTER_OPTIN_URL = "https://play.google.com/apps/testing/com.hinachti.app"
 
 MONTHS = [
@@ -196,7 +200,8 @@ def testers_html() -> str:
             f'        מספיק לפתוח אותה מדי פעם. אפשר לפרוש בכל רגע.\n'
             f'      </p>\n'
             f'      <p class="testers-note">\n'
-            f'        צריך חשבון Google, כי ככה גוגל יודעת שהצטרפת. אם בצעד 2 מופיעה הודעה שהבדיקה\n'
+            f'        בצעד 1 מתחברים לחשבון Google ולוחצים «הצטרפות לקבוצה». החשבון נחוץ כי ככה\n'
+            f'        גוגל יודעת שהצטרפת. אם בצעד 2 מופיעה הודעה שהבדיקה\n'
             f'        עוד לא זמינה, ההצטרפות לקבוצה כבר נשמרה, ואפשר לנסות שוב בעוד יום.\n'
             f'      </p>'
         )
