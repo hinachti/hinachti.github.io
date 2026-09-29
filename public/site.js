@@ -167,82 +167,171 @@
 
   // --- the reel: a recording of the app, scrubbed by the scroll ------------
   //
-  // Thirty-four stills rather than a video: a video that is seeked rather than
-  // played stutters, and iOS will not always seek one at all. The frames are
-  // fetched only when the section is close, and a reader who asked for less
-  // motion, or is on a metered connection, keeps the still image.
+  // Stills rather than a video: a video that is seeked rather than played
+  // stutters, and iOS will not always seek one at all. Every frame of motion is
+  // there, at 30 a second; reel.json (written by tools/make-reel.py) says which
+  // picture belongs to each step of the scroll, so a screen that stands still
+  // is one file however long it stands.
+  //
+  // Three things make it glide rather than click from picture to picture:
+  // the play head eases after the scroll instead of jumping with each notch of
+  // the wheel; between two frames the next one is faded in by the fraction
+  // the play head has travelled; and the frames arrive coarse to fine (every
+  // eighth first, then the gaps), so the whole story scrubs within moments
+  // and only gets smoother while the rest loads.
+  //
+  // The frames are fetched only when the section is close, and a reader who
+  // asked for less motion, or is on a metered connection, keeps the still.
   var reel = document.getElementById('reel');
   if (reel) {
     var canvas = reel.querySelector('.reel-canvas');
     var poster = reel.querySelector('.reel-poster');
     var steps = reel.querySelectorAll('.reel-steps li');
-    var COUNT = 34;
     var saveData = navigator.connection && navigator.connection.saveData;
+    // The last stretch is the app's own screen settling, so the frames are
+    // spread over the first 88% of the section and the end simply holds.
+    var SPAN = 0.88;
 
     if (reduced || saveData || !canvas.getContext) {
       canvas.remove();
+      reel.classList.add('reel-still');
     } else {
       var ctx = canvas.getContext('2d', { alpha: false });
-      var frames = new Array(COUNT);
-      var ready = 0;
-      var shown = -1;
+      var seq = null;
+      var files = [];
+      var marks = [];
+      for (var sm = 0; sm < steps.length; sm++) marks.push(parseFloat(steps[sm].getAttribute('data-at')));
+      var target = 0;
+      var head = 0;
+      var drawnKey = '';
+      var gliding = false;
 
-      var draw = function (index) {
-        var image = frames[index];
-        if (!image || index === shown) return;
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-        shown = index;
+      var clamp = function (v) { return Math.min(1, Math.max(0, v)); };
+      // 0 before a, 1 after b, straight in between.
+      var ramp = function (v, a, b) { return clamp((v - a) / (b - a)); };
+
+      // The nearest step, from i outward, whose picture has arrived.
+      var nearest = function (i) {
+        for (var d = 0; d < seq.length; d++) {
+          if (i - d >= 0 && files[seq[i - d]]) return files[seq[i - d]];
+          if (i + d < seq.length && files[seq[i + d]]) return files[seq[i + d]];
+        }
+        return null;
+      };
+
+      var paint = function (pos) {
+        var last = seq.length - 1;
+        var i = Math.min(last, Math.floor(pos));
+        var a = nearest(i);
+        if (!a) return;
+        var b = nearest(Math.min(last, i + 1));
+        var mix = b && b !== a ? Math.round((pos - i) * 20) / 20 : 0;
+        var key = a.src + '|' + (mix ? b.src + '|' + mix : '');
+        if (key === drawnKey) return;
+        drawnKey = key;
+        ctx.globalAlpha = 1;
+        ctx.drawImage(a, 0, 0, canvas.width, canvas.height);
+        if (mix) {
+          ctx.globalAlpha = mix;
+          ctx.drawImage(b, 0, 0, canvas.width, canvas.height);
+          ctx.globalAlpha = 1;
+        }
+        // Until now the still underneath showed through.
+        canvas.classList.add('drawn');
       };
 
       var position = function () {
         var box = reel.getBoundingClientRect();
         var travel = reel.offsetHeight - window.innerHeight;
         if (travel <= 0) return 0;
-        return Math.min(1, Math.max(0, -box.top / travel));
+        return clamp(-box.top / travel);
       };
 
-      var reelTick = false;
-      var updateReel = function () {
-        reelTick = false;
-        var p = position();
-        // The last stretch is the app's own animation settling, so the frames
-        // are spread over the first 88% and the end simply holds.
-        var index = Math.round(Math.min(1, p / 0.88) * (COUNT - 1));
-        draw(index);
+      var show = function (p) {
+        if (seq) paint(Math.min(1, p / SPAN) * (seq.length - 1));
+        var pressAt = marks[1] || 0.2;
+        var doneAt = marks[2] || 0.5;
         // The halo behind the phone follows the story: warmer as the morning
         // plays out, with a touch of green once the day is marked.
-        reel.style.setProperty('--reel', p.toFixed(3));
-        reel.style.setProperty('--reel-done', Math.min(1, Math.max(0, (p - 0.7) / 0.2)).toFixed(3));
+        reel.style.setProperty('--reel', p.toFixed(4));
+        reel.style.setProperty('--reel-done', ramp(p, doneAt, doneAt + 0.2).toFixed(3));
+        // The phone arrives tilted back a little and straightens as the story
+        // starts; the line beside the steps fills as it goes.
+        reel.style.setProperty('--in', ramp(p, 0, 0.12).toFixed(3));
+        reel.style.setProperty('--reel-fill', clamp(p / SPAN).toFixed(4));
+        // The reminder drops in as the section settles and is gone by the
+        // time the button is pressed; the streak line rises out of the phone
+        // once the screen has come back to say the day is marked.
+        reel.style.setProperty('--note', Math.min(ramp(p, 0.008, 0.04),1 - ramp(p, pressAt - 0.05, pressAt)).toFixed(3));
+        reel.style.setProperty('--streak', ramp(p, doneAt + (SPAN - doneAt) * 0.6, SPAN + 0.02).toFixed(3));
         for (var s = 0; s < steps.length; s++) {
-          var at = parseFloat(steps[s].getAttribute('data-at'));
-          var nextAt = s + 1 < steps.length ? parseFloat(steps[s + 1].getAttribute('data-at')) : 2;
-          steps[s].classList.toggle('on', p >= at && p < nextAt);
+          var nextAt = s + 1 < steps.length ? marks[s + 1] : 2;
+          steps[s].classList.toggle('on', p >= marks[s] && p < nextAt);
         }
+      };
+
+      // The play head eases after the scroll: a fifth of the way each frame,
+      // and it stops asking for frames once it has arrived.
+      var glide = function () {
+        target = position();
+        var gap = target - head;
+        head = Math.abs(gap) < 0.0004 ? target : head + gap * 0.2;
+        show(head);
+        if (head !== target) requestAnimationFrame(glide);
+        else gliding = false;
       };
 
       var onReelScroll = function () {
-        if (reelTick) return;
-        reelTick = true;
-        requestAnimationFrame(updateReel);
+        if (gliding) return;
+        gliding = true;
+        requestAnimationFrame(glide);
+      };
+
+      var fetchFrame = function (index) {
+        var image = new Image();
+        image.decoding = 'async';
+        image.onload = function () {
+          files[index] = image;
+          drawnKey = '';
+          show(head);
+        };
+        image.src = '/reel/' + ('00' + index).slice(-3) + '.webp';
       };
 
       var load = function () {
-        for (var f = 0; f < COUNT; f++) {
-          (function (index) {
-            var image = new Image();
-            image.decoding = 'async';
-            image.src = '/reel/' + (index < 10 ? '0' : '') + index + '.webp';
-            image.onload = function () {
-              frames[index] = image;
-              ready++;
-              if (index === 0) draw(0);
-              if (ready === COUNT) updateReel();
-            };
-          })(f);
-        }
+        var request = new XMLHttpRequest();
+        request.open('GET', '/reel/reel.json');
+        request.responseType = 'json';
+        request.onload = function () {
+          var data = request.response;
+          if (!data || !data.seq || !data.count) return;
+          seq = data.seq;
+          // The steps of the story start where the motion does.
+          if (data.marks && data.marks.length === steps.length) {
+            marks = data.marks.map(function (m) { return m * SPAN; });
+          }
+          // Coarse to fine: the first and last, every eighth, fourth,
+          // second, then the rest.
+          var queued = {};
+          var order = [0, data.count - 1];
+          for (var stride = 8; stride >= 1; stride = stride / 2) {
+            for (var f = 0; f < data.count; f += stride) order.push(f);
+          }
+          for (var q = 0; q < order.length; q++) {
+            if (queued[order[q]]) continue;
+            queued[order[q]] = true;
+            fetchFrame(order[q]);
+          }
+          head = target = position();
+          show(head);
+        };
+        request.send();
         window.addEventListener('scroll', onReelScroll, { passive: true });
         window.addEventListener('resize', onReelScroll);
       };
+
+      // The words are right from the start, frames or no frames.
+      show(position());
 
       if ('IntersectionObserver' in window) {
         var near = new IntersectionObserver(function (entries) {

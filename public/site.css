@@ -727,14 +727,14 @@ footer a { color: var(--dim); }
 
 /* ------------------------------------------------- the reel
  *
- * A real recording of the app, thirty-four frames, with the scroll as the play
- * head: the section is three screens tall and the phone stays put while you
- * pass through it. Frames rather than a video file because a video that is
- * scrubbed rather than played stutters on phones, and because 260KB of stills
- * beats a megabyte of mp4 that iOS may refuse to seek.
+ * A real recording of the app, every frame of its motion at 30 a second, with
+ * the scroll as the play head: the section is several screens tall and the
+ * phone stays put while you pass through it. Frames rather than a video file
+ * because a video that is scrubbed rather than played stutters on phones and
+ * iOS may refuse to seek one at all.
  */
 
-.reel { padding: 0; height: 320vh; position: relative; }
+.reel { padding: 0; height: 360vh; position: relative; }
 .reel-sticky {
   position: sticky;
   top: 0;
@@ -831,21 +831,133 @@ footer a { color: var(--dim); }
     inset 0 0 0 1px rgba(224, 169, 74, 0.08);
 }
 .reel-phone canvas { position: absolute; inset: 0; }
-/* Without the script the still image is the whole story, so it stays. */
+/* Without the script the still image is the whole story, so it stays; with
+   it, the canvas takes over once it has a frame to show. */
 .reel-phone canvas { opacity: 0; }
-.js .reel-phone canvas { opacity: 1; }
+.reel-phone canvas.drawn { opacity: 1; }
+
+/* The scroll moves more than the recording. The script sets, from 0 to 1:
+   --in       the phone straightening as the story starts
+   --reel     how far through the section the reader is
+   --note     the reminder, in and then out before the button is pressed
+   --streak   the streak line, once the day is marked
+   Nothing below moves without the script, or for a reader who asked for less
+   motion: the defaults are the still picture. */
+.reel-phone {
+  transform:
+    perspective(1400px)
+    rotateX(calc((1 - var(--in, 1)) * 9deg))
+    scale(calc(0.93 + var(--in, 1) * 0.07));
+  transform-origin: 50% 80%;
+  will-change: transform;
+}
+.reel-copy { transform: translateY(calc((0.5 - var(--reel, 0.5)) * 36px)); }
+.reel-hint { opacity: calc(1 - var(--reel, 0) * 8); }
+
+/* The line beside the steps fills from dawn to the app's green. */
+.reel-steps { position: relative; }
+.reel-steps::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  width: 2px;
+  height: calc(var(--reel-fill, 0) * 100%);
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--dawn), var(--done));
+  box-shadow: 0 0 10px rgba(224, 169, 74, 0.45);
+}
+
+.reel-note,
+.reel-streak {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  margin: 0;
+}
+.reel-note {
+  top: -3%;
+  inset-inline: -13%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 20px;
+  background: rgba(33, 28, 21, 0.97);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(224, 169, 74, 0.28);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55), 0 0 30px rgba(224, 169, 74, 0.12);
+  opacity: var(--note, 0);
+  transform:
+    translateY(calc((1 - var(--note, 0)) * -28px))
+    scale(calc(0.95 + var(--note, 0) * 0.05));
+}
+.reel-note img { width: 40px; height: 40px; border-radius: 11px; flex: none; }
+.reel-note p { margin: 0; line-height: 1.35; }
+.reel-note-app { font-size: 0.72rem; color: var(--faint); }
+.reel-note-title { font-size: 0.92rem; font-weight: 600; color: var(--text); }
+.reel-note-text { font-size: 0.8rem; color: var(--dim); }
+
+.reel-streak {
+  bottom: 16%;
+  left: 50%;
+  white-space: nowrap;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text);
+  background: linear-gradient(rgba(132, 165, 92, 0.18), rgba(132, 165, 92, 0.18)), rgba(23, 20, 15, 0.9);
+  border: 1px solid rgba(132, 165, 92, 0.5);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55), 0 0 26px rgba(132, 165, 92, 0.28);
+  opacity: var(--streak, 0);
+  transform:
+    translateX(-50%)
+    translateY(calc((1 - var(--streak, 0)) * 34px))
+    scale(calc(0.9 + var(--streak, 0) * 0.1));
+}
+.reel-streak span { color: var(--done); font-weight: 700; }
+
+/* Still: the layers belong to the motion, so they stay out of the picture. */
+.reel-still .reel-note,
+.reel-still .reel-streak { display: none; }
 
 @media (min-width: 900px) {
   .reel-inner { grid-template-columns: 1fr auto; gap: 60px; justify-items: start; }
-  .reel-phone { width: 320px; }
+  /* Never taller than the window: the screen is 760 by 1604, and a laptop's
+     window can be shorter than a 320px-wide phone is tall. */
+  .reel-phone { width: min(320px, calc((100vh - 110px) * 0.474)); }
 }
 
 @media (max-width: 899px) {
-  .reel { height: 300vh; }
+  .reel { height: 330vh; }
   .reel-inner { grid-template-rows: auto auto; }
   .reel-copy { text-align: center; }
   .reel-steps { text-align: start; }
-  .reel-phone { width: min(230px, 54vw); }
+  /* The words sit above the phone here, so it gets what height they leave,
+     less the download bar that follows the reader along the bottom. */
+  .reel-phone { width: min(230px, 54vw, calc((100svh - 340px) * 0.474)); }
+  /* Three steps stacked would push the phone off the screen, so on a phone
+     they share one place and each takes over from the last. */
+  .js .reel:not(.reel-still) .reel-steps li {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .js .reel:not(.reel-still) .reel-steps li.on { opacity: 1; transform: none; }
+  .reel-steps::after { display: none; }
+  /* The phone is small here; the reminder keeps a readable width of its own. */
+  .reel-note {
+    inset-inline: auto;
+    left: 50%;
+    width: min(290px, 84vw);
+    transform:
+      translateX(-50%)
+      translateY(calc((1 - var(--note, 0)) * -28px))
+      scale(calc(0.95 + var(--note, 0) * 0.05));
+  }
 }
 
 /* --------------------------------------------------------- stats */

@@ -26,7 +26,7 @@
 <link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/img/icon-180.png">
 <link rel="preload" href="/fonts/heebo.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/site.css?v=202609291144">
+<link rel="stylesheet" href="/site.css?v=202609291157">
 <script>document.documentElement.className += ' js';</script>
 
 <script type="application/ld+json">
@@ -224,15 +224,27 @@
           <h2 id="reel-title">ככה זה עובד</h2>
           <ol class="reel-steps">
             <li data-at="0"><b>התזכורת מגיעה.</b> המסך מראה את הזמנים ואת מה שנשאר מהזמן.</li>
-            <li data-at="0.42"><b>לוחצים «הנחתי».</b> שאלה אחת, כדי שלחיצה בטעות לא תסמן יום.</li>
-            <li data-at="0.72"><b>וזהו.</b> היום מסומן, הרצף ממשיך, והמסך משתחרר.</li>
+            <li data-at="0.18"><b>לוחצים «הנחתי».</b> שאלה אחת, כדי שלחיצה בטעות לא תסמן יום.</li>
+            <li data-at="0.5"><b>וזהו.</b> היום מסומן, הרצף ממשיך, והמסך משתחרר.</li>
           </ol>
           <p class="reel-hint">גלול כדי לראות</p>
         </div>
         <div class="reel-phone">
-          <img class="reel-poster" src="/reel/00.webp" width="760" height="1604"
+          <img class="reel-poster" src="/reel/000.webp" width="760" height="1604"
                alt="מסך הבוקר של הנחתי: השעה, הזמנים שנותרו וכפתור «הנחתי»">
           <canvas class="reel-canvas" width="760" height="1604" aria-hidden="true"></canvas>
+          <!-- Layers that move with the scroll. Their words are the app's own:
+               the reminder as it arrives at 07:20, and the line the screen
+               shows once the day is marked. -->
+          <div class="reel-note" aria-hidden="true">
+            <img src="/img/icon-192.png" width="40" height="40" alt="">
+            <div>
+              <p class="reel-note-app">הנחתי · עכשיו</p>
+              <p class="reel-note-title">זמן להניח תפילין</p>
+              <p class="reel-note-text">נותרו 10 שעות ו-54 דקות עד השקיעה</p>
+            </div>
+          </div>
+          <p class="reel-streak" aria-hidden="true"><span>✓</span> הונח היום · 3 ימים ברצף</p>
         </div>
       </div>
     </div>
@@ -620,6 +632,6 @@
          data-tall="/video/promo-9x16-{q}.mp4" data-tall-poster="/video/promo-9x16.jpg"></video>
 </dialog>
 
-<script src="/site.js?v=202609291144" defer></script>
+<script src="/site.js?v=202609291157" defer></script>
 </body>
 </html>
