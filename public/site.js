@@ -182,8 +182,11 @@
   //
   // The frames are fetched only when the section is close, and a reader who
   // asked for less motion, or is on a metered connection, keeps the still.
+  //
+  // Its own function scope: everything here is `var`, and a `paint` of its
+  // own once replaced the page clock's `paint` above, which stopped the sun.
   var reel = document.getElementById('reel');
-  if (reel) {
+  if (reel) (function () {
     var canvas = reel.querySelector('.reel-canvas');
     var poster = reel.querySelector('.reel-poster');
     var steps = reel.querySelectorAll('.reel-steps li');
@@ -219,7 +222,7 @@
         return null;
       };
 
-      var paint = function (pos) {
+      var paintReel = function (pos) {
         var last = seq.length - 1;
         var i = Math.min(last, Math.floor(pos));
         var a = nearest(i);
@@ -248,7 +251,7 @@
       };
 
       var show = function (p) {
-        if (seq) paint(Math.min(1, p / SPAN) * (seq.length - 1));
+        if (seq) paintReel(Math.min(1, p / SPAN) * (seq.length - 1));
         var pressAt = marks[1] || 0.2;
         var doneAt = marks[2] || 0.5;
         // The halo behind the phone follows the story: warmer as the morning
@@ -347,7 +350,7 @@
       // The still underneath is what shows until the first frame is decoded.
       if (poster) poster.setAttribute('aria-hidden', 'true');
     }
-  }
+  })();
 
   // --- the film ------------------------------------------------------------
   //
