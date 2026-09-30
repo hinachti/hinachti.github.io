@@ -67,6 +67,19 @@ SHOTS = [
     ("psalm", "פרק מנוקד", "תהילים פרק יג בניקוד מלא, פסוק בכל שורה"),
 ]
 
+# Template and folder of the guides page and of each article it lists, in the
+# order the sitemap lists them. Each article answers a search the main page and
+# the others do not, so no two pages compete for the same query. The main
+# page's footer links only to the guides page, which links to every article.
+ARTICLES = (
+    ("madrichim.html", "madrichim"),
+    ("seder.html", "seder-hanachat-tefillin"),
+    ("zman.html", "zman-hanachat-tefillin"),
+    ("bar-mitzvah.html", "tefillin-bar-mitzvah"),
+    ("shachachti.html", "shachachti-lehaniach-tefillin"),
+    ("chol-hamoed.html", "tefillin-chol-hamoed"),
+)
+
 FAQ = [
     (
         "האם האפליקציה בחינם?",
@@ -344,10 +357,10 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    # The two article pages: what people search for when they search for
-    # tefillin, each ending on the app. Same values as the main page, so the
+    # The guides page and the articles: what people search for when they search
+    # for tefillin, each article ending on the app. Same values as the main page, so the
     # download button always names the current file.
-    for template, slug in (("seder.html", "seder-hanachat-tefillin"), ("zman.html", "zman-hanachat-tefillin")):
+    for template, slug in ARTICLES:
         folder = PUBLIC / slug
         folder.mkdir(exist_ok=True)
         (folder / "index.html").write_text(render(template, values), encoding="utf-8")
@@ -362,9 +375,11 @@ def main() -> None:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         f"  <url><loc>{SITE_URL}/</loc><lastmod>{built}</lastmod><priority>1.0</priority></url>\n"
-        f"  <url><loc>{SITE_URL}/seder-hanachat-tefillin/</loc><lastmod>{built}</lastmod><priority>0.8</priority></url>\n"
-        f"  <url><loc>{SITE_URL}/zman-hanachat-tefillin/</loc><lastmod>{built}</lastmod><priority>0.8</priority></url>\n"
-        f"  <url><loc>{SITE_URL}/privacy/</loc><lastmod>{built}</lastmod><priority>0.3</priority></url>\n"
+        + "".join(
+            f"  <url><loc>{SITE_URL}/{slug}/</loc><lastmod>{built}</lastmod><priority>0.8</priority></url>\n"
+            for _, slug in ARTICLES
+        )
+        + f"  <url><loc>{SITE_URL}/privacy/</loc><lastmod>{built}</lastmod><priority>0.3</priority></url>\n"
         "</urlset>\n",
         encoding="utf-8",
     )
