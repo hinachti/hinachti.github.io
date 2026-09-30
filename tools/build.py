@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 import html
 import json
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -138,6 +139,50 @@ def release() -> dict:
         "date_iso": when.strftime("%Y-%m-%d"),
         "date_he": f"{when.day} {MONTHS[when.month - 1]} {when.year}",
     }
+
+
+def history(current: str, keep: int = 4) -> list[dict]:
+    """The releases before this one, newest first, from the releases project's
+    own record: every published latest.json is a commit there, so the history
+    needs no second file to keep in step. Two versions that went out with the
+    same notes (a quick re-release) are one entry, the later one.
+    """
+    log = subprocess.run(
+        ["git", "-C", str(RELEASES), "log", "--format=%H %cs", "--", "latest.json"],
+        capture_output=True, text=True, encoding="utf-8", check=True,
+    ).stdout.split()
+    out, seen = [], set()
+    for sha, day in zip(log[0::2], log[1::2]):
+        shown = subprocess.run(
+            ["git", "-C", str(RELEASES), "show", f"{sha}:latest.json"],
+            capture_output=True, text=True, encoding="utf-8",
+        )
+        try:
+            data = json.loads(shown.stdout)
+        except ValueError:
+            continue
+        name, notes = data.get("versionName"), data.get("notes", "")
+        if not name or name == current or notes in seen:
+            continue
+        seen.add(notes)
+        y, m, d = (int(x) for x in day.split("-"))
+        out.append({"version": name, "notes": notes, "date_he": f"{d} {MONTHS[m - 1]} {y}"})
+        if len(out) == keep:
+            break
+    return out
+
+
+def updates_html(current: str) -> str:
+    """Earlier releases, folded, under the current one's notes."""
+    rows = []
+    for rel in history(current):
+        rows.append(
+            f"      <details>\n"
+            f"        <summary>גרסה <bdi>{html.escape(rel['version'])}</bdi> · {html.escape(rel['date_he'])}</summary>\n"
+            f"        <div class=\"answer\"><div><p>{html.escape(rel['notes'])}</p></div></div>\n"
+            f"      </details>"
+        )
+    return "\n".join(rows).strip()
 
 
 def shots_html() -> str:
@@ -273,6 +318,7 @@ def main() -> None:
         "SIZE_MB": rel["size_mb"],
         "APK": apk_name,
         "NOTES": html.escape(rel["notes"]),
+        "UPDATES": updates_html(rel["version"]),
         "SHOTS": shots_html(),
         "FAQ_HTML": faq_html(),
         "FAQ_JSONLD": faq_jsonld(),
