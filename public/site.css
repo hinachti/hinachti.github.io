@@ -1389,6 +1389,41 @@ summary:hover { color: var(--dawn); }
 .has-cursor.cursor-typing .cursor-dot,
 .has-cursor.cursor-typing .cursor-ring { opacity: 0 !important; }
 
+/* The wheel press: our own autoscroll badge, where the wheel was pressed. The
+ * arrow in the direction of travel lights up; the trailing ring steps aside. */
+.autoscroll {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147483646;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: rgba(14, 12, 9, 0.78);
+  border: 1.5px solid rgba(224, 169, 74, 0.6);
+  box-shadow: 0 0 0 1px rgba(14, 12, 9, 0.5), 0 0 18px rgba(224, 169, 74, 0.28);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+.autoscroll.on { opacity: 1; }
+.autoscroll svg { display: block; width: 100%; height: 100%; }
+.autoscroll path {
+  fill: none;
+  stroke: rgba(243, 207, 133, 0.55);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.15s ease;
+}
+.autoscroll circle { fill: #f3cf85; }
+.autoscroll.up path.up,
+.autoscroll.down path.down { stroke: #f3cf85; filter: drop-shadow(0 0 3px rgba(243, 207, 133, 0.9)); }
+.autoscrolling .cursor-ring { opacity: 0 !important; }
+
 /* The guides page: one card per guide, the whole card a link. */
 .prose .guides { display: grid; gap: 12px; margin: 30px 0 8px; }
 .prose .guide {

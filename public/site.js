@@ -738,5 +738,83 @@
     // Off the page (into the browser's own bar, or another window): gone.
     root.addEventListener('mouseleave', function () { root.classList.remove('cursor-on'); });
     window.addEventListener('blur', function () { root.classList.remove('cursor-on'); });
+
+    // --- the wheel press: the browser's autoscroll, drawn in our own light ---
+    //
+    // Pressing the wheel puts the browser's black two-arrow badge on the page,
+    // which no page can restyle, so this takes the gesture over and draws its
+    // own. It behaves the way the browser's does: press and release, then move
+    // the mouse to scroll and press anything to stop; or hold the wheel down,
+    // move, and let go. The farther from the badge, the faster. A wheel press on
+    // a link still opens it in a new tab, and on a field it is left alone.
+    var badge = document.createElement('div');
+    badge.className = 'autoscroll';
+    badge.setAttribute('aria-hidden', 'true');
+    badge.innerHTML = '<svg viewBox="0 0 34 34"><path class="up" d="M12 13.5l5-5 5 5"/>' +
+      '<circle cx="17" cy="17" r="1.6"/><path class="down" d="M12 20.5l5 5 5-5"/></svg>';
+    document.body.appendChild(badge);
+
+    var LEAVE = 'a, button, input, textarea, select, label, summary, [contenteditable="true"], [role="button"], dialog';
+    var DEAD = 10;       // px around the badge that do not scroll
+    var oy = 0, cy = 0, pressedAt = 0;
+    var scrolling = false, holding = false, last = 0;
+
+    var stop = function () {
+      if (!scrolling) return;
+      scrolling = false;
+      holding = false;
+      badge.classList.remove('on', 'up', 'down');
+      root.classList.remove('autoscrolling');
+    };
+    var step = function (now) {
+      if (!scrolling) return;
+      var dt = last ? Math.min(now - last, 50) : 16;
+      last = now;
+      var d = cy - oy;
+      var dir = d > DEAD ? 1 : d < -DEAD ? -1 : 0;
+      badge.classList.toggle('down', dir > 0);
+      badge.classList.toggle('up', dir < 0);
+      if (dir) {
+        // Gentle near the badge, quick far from it, like the browser's own.
+        // About 60 px/s just past the dead zone, 350 at 90px, 2800 at 400px.
+        var px = Math.min(Math.pow(Math.abs(d) - DEAD, 1.3) * 0.02, 50) * (dt / 16);
+        window.scrollBy({ top: dir * px, left: 0, behavior: 'instant' });
+      }
+      requestAnimationFrame(step);
+    };
+
+    document.addEventListener('mousedown', function (event) {
+      if (scrolling) {
+        // Any press ends it, and is not also a click on what lies beneath.
+        event.preventDefault();
+        stop();
+        return;
+      }
+      if (event.button !== 1) return;
+      var target = event.target && event.target.closest ? event.target : null;
+      if (target && target.closest(LEAVE)) return;
+      if (document.documentElement.scrollHeight <= window.innerHeight + 1) return;
+      event.preventDefault();
+      oy = cy = event.clientY;
+      pressedAt = event.timeStamp;
+      scrolling = true;
+      holding = true;
+      last = 0;
+      badge.style.transform = 'translate3d(' + event.clientX + 'px,' + event.clientY + 'px,0)';
+      badge.classList.add('on');
+      root.classList.add('autoscrolling');
+      requestAnimationFrame(step);
+    });
+    document.addEventListener('mousemove', function (event) { cy = event.clientY; }, { passive: true });
+    document.addEventListener('mouseup', function (event) {
+      if (!scrolling || event.button !== 1 || !holding) return;
+      holding = false;
+      // A quick press and release keeps it going until the next press; a hold
+      // that moved away from the badge was a drag, and ends with the release.
+      if (event.timeStamp - pressedAt > 350 && Math.abs(cy - oy) > DEAD) stop();
+    });
+    document.addEventListener('keydown', function (event) { if (event.key === 'Escape') stop(); });
+    document.addEventListener('wheel', stop, { passive: true });
+    window.addEventListener('blur', stop);
   }
 })();
