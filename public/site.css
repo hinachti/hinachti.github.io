@@ -624,6 +624,11 @@ footer a { color: var(--dim); }
 }
 .colophon span { color: var(--line); }
 .colophon b { color: var(--dim); font-weight: 600; }
+.colophon a { text-decoration: none; }
+.colophon a:hover { color: var(--text); }
+/* The second line: who and which version, quieter than the links above it. */
+.colophon-meta { margin-top: 14px; font-size: 0.82rem; }
+.colophon-meta small { font-size: inherit; }
 
 .testers-note { color: var(--faint); font-size: 0.92rem; margin-top: 18px; }
 
@@ -667,6 +672,9 @@ footer a { color: var(--dim); }
 .bar .btn { padding: 13px 28px; font-size: 1rem; width: min(520px, 100%); }
 
 @media (min-width: 820px) { .bar { display: none; } }
+/* Where the bar shows, the page ends above it, so the last line of the
+   footer is never hidden underneath. */
+@media (max-width: 819px) { footer { padding-bottom: calc(110px + env(safe-area-inset-bottom)); } }
 
 /* ------------------------------------------------- daybreak, one clock
  *
@@ -1297,6 +1305,7 @@ summary:hover { color: var(--dawn); }
 .prose .page-cta .btn { margin-top: 6px; }
 .prose .page-cta .more { margin: 16px 0 0; }
 .prose .fine { margin-top: 26px; font-size: 0.88rem; color: var(--faint); }
+.prose .back { display: flex; flex-wrap: wrap; gap: 6px 22px; }
 
 /* --------------------------------------------------------- scrollbar
  *
@@ -1379,3 +1388,28 @@ summary:hover { color: var(--dawn); }
 .has-cursor:has(dialog[open]) .cursor-ring,
 .has-cursor.cursor-typing .cursor-dot,
 .has-cursor.cursor-typing .cursor-ring { opacity: 0 !important; }
+
+/* The guides page: one card per guide, the whole card a link. */
+.prose .guides { display: grid; gap: 12px; margin: 30px 0 8px; }
+.prose .guide {
+  display: grid;
+  gap: 4px;
+  padding: 18px 22px;
+  border: 1px solid var(--line, #332c21);
+  border-radius: 16px;
+  background: rgba(240, 233, 219, 0.03);
+  text-decoration: none;
+  transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease;
+}
+.prose .guide:hover,
+.prose .guide:focus-visible {
+  border-color: rgba(224, 169, 74, 0.55);
+  background: rgba(224, 169, 74, 0.06);
+  transform: translateY(-1px);
+}
+.prose .guide-title { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; color: var(--text); }
+.prose .guide-text { color: var(--dim); font-size: 0.95rem; }
+.prose .guide-title::after { content: ' ←'; color: var(--dawn); font-family: var(--sans); font-size: 0.95rem; }
+@media (min-width: 720px) { .prose .guides { grid-template-columns: 1fr 1fr; } }
+@media (prefers-reduced-motion: reduce) { .prose .guide { transition: none; } .prose .guide:hover { transform: none; } }
+
