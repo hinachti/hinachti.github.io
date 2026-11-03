@@ -48,6 +48,11 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* A safety net under the rule above: nothing on the page may widen it past the
+   screen. clip, not hidden, so the page does not become a scroll container
+   and position: sticky keeps working. */
+html { overflow-x: clip; }
+
 body {
   margin: 0;
   background: var(--bg);
@@ -1202,7 +1207,17 @@ summary:hover { color: var(--dawn); }
 .field .err { display: none; color: var(--urgent); font-size: 0.84rem; }
 .field.bad input, .field.bad textarea { border-color: var(--urgent); }
 .field.bad .err { display: block; }
-.trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+/* Hidden the way .skip is, never parked off the page: at left:-10000px in a
+   right-to-left document it widened the page to 10,354px, and on a phone the
+   whole site could be pinched out into a strip beside an empty black field. */
+.trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 
 .send { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; margin-top: 22px; }
 .send .fine { margin: 0; color: var(--faint); font-size: 0.86rem; max-width: 44ch; }
