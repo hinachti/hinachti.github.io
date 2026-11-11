@@ -1,0 +1,11 @@
+# The contact form's gate (worker.js). Deploy from this folder: npx wrangler deploy
+# Secret SCRIPT_URL: the Apps Script web app's /exec address. Only this Worker knows it; never put it in the site.
+name = "hinachti-contact"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+preview_urls = false
+
+[[kv_namespaces]]
+binding = "LIMITS"
+id = "95b62b6adb7e48348373008ec2265533"

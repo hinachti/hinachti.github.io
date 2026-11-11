@@ -454,7 +454,8 @@
   //
   // The app's "כתבו לנו" opens this page with ?from=app&v=<version>&device=<model>,
   // so a report from the app arrives already saying which phone and version.
-  var CONTACT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwV5B4HwFJturt6FyxYBqQ_VlZdsI1a09GBNv19fAJGBm6dwq-tQAerxuX6LcC-3gDGMw/exec';
+  // The gate (backend/gate): it limits each sender and passes the message on to the Apps Script, whose address only it knows.
+  var CONTACT_ENDPOINT = 'https://hinachti-contact.hinachti-ai.workers.dev/';
   var POW_BITS = 16;
   var form = document.getElementById('contact-form');
   if (form) {

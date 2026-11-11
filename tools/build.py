@@ -303,7 +303,7 @@ def render(name: str, values: dict) -> str:
 CSP = (
     "default-src 'none'; script-src 'self'{hashes}; style-src 'self' 'unsafe-inline'; "
     "img-src 'self' data:; font-src 'self'; media-src 'self'; manifest-src 'self'; "
-    "connect-src 'self' https://script.google.com https://script.googleusercontent.com; "
+    "connect-src 'self' https://hinachti-contact.hinachti-ai.workers.dev; "
     "base-uri 'none'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
 )
 
