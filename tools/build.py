@@ -293,7 +293,32 @@ def render(name: str, values: dict) -> str:
     left = [line for line in text.splitlines() if "{{" in line]
     if left:
         raise SystemExit("a placeholder was left unfilled:\n" + "\n".join(left[:5]))
-    return text
+    return with_csp(text)
+
+
+# GitHub Pages can't send headers, so every page carries its Content-Security-Policy
+# in a <meta>. Scripts: site.js plus the page's own plain <script> lines, by hash
+# (computed here, so editing such a line can't break it). The form posts to the Apps
+# Script, which answers through script.googleusercontent.com.
+CSP = (
+    "default-src 'none'; script-src 'self'{hashes}; style-src 'self' 'unsafe-inline'; "
+    "img-src 'self' data:; font-src 'self'; media-src 'self'; manifest-src 'self'; "
+    "connect-src 'self' https://script.google.com https://script.googleusercontent.com; "
+    "base-uri 'none'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+)
+
+
+def with_csp(text: str) -> str:
+    import base64, hashlib, re
+    inline = re.findall(r"<script>(.*?)</script>", text, flags=re.S)
+    hashes = "".join(
+        " 'sha256-%s'" % base64.b64encode(hashlib.sha256(s.encode("utf-8")).digest()).decode()
+        for s in dict.fromkeys(inline)
+    )
+    meta = '<meta http-equiv="Content-Security-Policy" content="%s">' % CSP.format(hashes=hashes)
+    if '<meta charset="utf-8">' not in text:
+        raise SystemExit("no <meta charset> to put the CSP after")
+    return text.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n' + meta, 1)
 
 
 def main() -> None:
